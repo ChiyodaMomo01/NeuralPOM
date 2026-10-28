@@ -3,12 +3,12 @@
 <h3 align="center">New Wine in an Old Bottle: A Hybrid Ocean Forecast Model with Differentiable Dynamics and Staged Learning</h3>
 
 <p align="center">
-  Ruiqi&nbsp;Shu<sup>1,†</sup> &nbsp;·&nbsp;
-  Guangliang&nbsp;Liu<sup>1,†</sup> &nbsp;·&nbsp;
-  Ruijian&nbsp;Gou<sup>2,†,*</sup> &nbsp;·&nbsp;
-  Tianrun&nbsp;Gao<sup>3</sup> &nbsp;·&nbsp;
-  Haomin&nbsp;Wen<sup>5</sup> &nbsp;·&nbsp;
-  Hao&nbsp;Li<sup>6,5,4,*</sup> &nbsp;·&nbsp;
+  Ruiqi&nbsp;Shu<sup>1,2,†</sup> &nbsp;·&nbsp;
+  Guangliang&nbsp;Liu<sup>1,3,4,†</sup> &nbsp;·&nbsp;
+  Ruijian&nbsp;Gou<sup>5,†,*</sup> &nbsp;·&nbsp;
+  Tianrun&nbsp;Gao<sup>6</sup> &nbsp;·&nbsp;
+  Haomin&nbsp;Wen<sup>7</sup> &nbsp;·&nbsp;
+  Hao&nbsp;Li<sup>8,7,2,*</sup> &nbsp;·&nbsp;
   Xiaomeng&nbsp;Huang<sup>1,*</sup>
 </p>
 
@@ -32,11 +32,13 @@
 <summary>作者单位与通讯作者</summary>
 
 1. Department of Earth System Science, Tsinghua University, Beijing, China
-2. Department of Ocean Big Data and Artificial Intelligence, Laoshan National Laboratory, Qingdao, China
-3. School of Computing and Data Science, The University of Hong Kong
-4. Shanghai Academy of Artificial Intelligence for Science, Shanghai, China
-5. Shanghai Innovation Institute, Shanghai, China
-6. Artificial Intelligence Innovation and Incubation Institute, Fudan University, Shanghai, China
+2. Shanghai Academy of Artificial Intelligence for Science, Shanghai, China
+3. State Key Laboratory of Physical Oceanography, Institute of Oceanographic Instrumentation, Shandong Academy of Sciences, Qingdao, Shandong 266100, China
+4. Key Laboratory of Computing Power Network and Information Security, Ministry of Education, Shandong Computer Science Center, Qilu University of Technology (Shandong Academy of Sciences), Jinan, Shandong 250353, China
+5. Department of Ocean Big Data and Artificial Intelligence, Laoshan National Laboratory, Qingdao, China
+6. School of Computing and Data Science, The University of Hong Kong
+7. Shanghai Innovation Institute, Shanghai, China
+8. Artificial Intelligence Innovation and Incubation Institute, Fudan University, Shanghai, China
 
 † 共同第一作者（同等贡献）。* 通讯作者：[Ruijian Gou](mailto:ruijian.gou@awi.de)、[Hao Li](mailto:lihao_lh@fudan.edu.cn)、[Xiaomeng Huang](mailto:hxm@tsinghua.edu.cn)。
 
