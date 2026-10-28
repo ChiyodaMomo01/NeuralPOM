@@ -33,8 +33,8 @@
 
 1. Department of Earth System Science, Tsinghua University, Beijing, China
 2. Shanghai Academy of Artificial Intelligence for Science, Shanghai, China
-3. State Key Laboratory of Physical Oceanography, Institute of Oceanographic Instrumentation, Shandong Academy of Sciences, Qingdao, Shandong 266100, China
-4. Key Laboratory of Computing Power Network and Information Security, Ministry of Education, Shandong Computer Science Center, Qilu University of Technology (Shandong Academy of Sciences), Jinan, Shandong 250353, China
+3. State Key Laboratory of Physical Oceanography, Institute of Oceanographic Instrumentation, Shandong Academy of Sciences, Qingdao, China
+4. Key Laboratory of Computing Power Network and Information Security, Ministry of Education, Shandong Computer Science Center, Qilu University of Technology (Shandong Academy of Sciences), Jinan, China
 5. Department of Ocean Big Data and Artificial Intelligence, Laoshan National Laboratory, Qingdao, China
 6. School of Computing and Data Science, The University of Hong Kong
 7. Shanghai Innovation Institute, Shanghai, China
