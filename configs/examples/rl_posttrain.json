@@ -1,0 +1,26 @@
+{
+  "frequency": "1day",
+  "world_size": 8,
+  "data_root": "../../data/reference/implicit_p0_fixed",
+  "run_root": "../../runs/rl_example",
+  "stages": {
+    "posttrain": {
+      "method": "rl",
+      "rl": {
+        "contexts_per_batch": 2,
+        "group_size": 4,
+        "noise_std": 0.03,
+        "failure_daily_loss": 1000.0,
+        "max_trajectories": 14000,
+        "validation_every_trajectories": 128,
+        "patience": 5,
+        "min_delta": 0.0
+      }
+    }
+  },
+  "wandb": {
+    "project": "neuralpom-v1",
+    "mode": "offline",
+    "entity": null
+  }
+}

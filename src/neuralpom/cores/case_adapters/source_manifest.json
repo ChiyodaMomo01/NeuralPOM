@@ -1,0 +1,146 @@
+{
+  "schema_version": 1,
+  "exports": {
+    "dg": [
+      {
+        "source": "reports/technical_report_20261001/case_adaptation_20261001/dg/source/fortran_compat.py",
+        "source_sha256": "89580c0fd97398aa1fbd13bf6fd5de45944f3010f438c12c34ddd6dc20daea7f",
+        "target": "fortran_compat.py",
+        "exported_sha256": "89580c0fd97398aa1fbd13bf6fd5de45944f3010f438c12c34ddd6dc20daea7f",
+        "import_translations": {}
+      },
+      {
+        "source": "reports/technical_report_20261001/case_adaptation_20261001/dg/source/dg_boundary.py",
+        "source_sha256": "1adab3fc5e4f4dc9d96e4d557aeba481c2cb3ef4ce78dd488f584146a8b8f969",
+        "target": "dg_boundary.py",
+        "exported_sha256": "1adab3fc5e4f4dc9d96e4d557aeba481c2cb3ef4ce78dd488f584146a8b8f969",
+        "import_translations": {}
+      },
+      {
+        "source": "reports/technical_report_20261001/case_adaptation_20261001/dg/source/dg_policy.py",
+        "source_sha256": "d97cc26e9f735cca7f7192c1d07c97cba461982cbfea687f006118c007bfea39",
+        "target": "dg_policy.py",
+        "exported_sha256": "483311763413d83e21de014188542f5ddc8ab8dd5b456942682c8077276707bf",
+        "import_translations": {
+          "from fortran_compat import": "from .fortran_compat import",
+          "from dg_boundary import": "from .dg_boundary import"
+        }
+      }
+    ],
+    "coastal": [
+      {
+        "source": "reports/technical_report_20261001/case_adaptation_20261001/coastal/source/coastal_boundary.py",
+        "source_sha256": "89991e17e2ec46a35fc85f2dad1b528590740ba9bec5c37d3a75218e18bd3299",
+        "target": "coastal_boundary.py",
+        "exported_sha256": "00159b7e0012422f67ddd31d35d9bac5d4bb5d996a1b1c95da76e4bfb99cfbf1",
+        "import_translations": {
+          "from neuralpom.cores.explicit.baroclinic import": "from .kernels.coastal_explicit_baroclinic import"
+        }
+      },
+      {
+        "source": "reports/technical_report_20261001/case_adaptation_20261001/coastal/source/coastal_compat.py",
+        "source_sha256": "aedd2fc7f58a1ac25236ea8304b6628ad04db4d02a0eb5b5921b032a20a18ed6",
+        "target": "coastal_compat.py",
+        "exported_sha256": "ea68c063120e7f8be104ce810baa76aff72b3ce598258cd83861d6d401965e2b",
+        "import_translations": {
+          "from fortran_compat import": "from .fortran_compat import"
+        }
+      },
+      {
+        "source": "reports/technical_report_20261001/case_adaptation_20261001/coastal/source/../runs/coastal_tide/amph_pom.dat",
+        "source_sha256": "8e33add7787e334a4ca3a5b306182a4f90d9349abd106badfd139796a4785bac",
+        "target": "data/amph_pom.dat",
+        "exported_sha256": "8e33add7787e334a4ca3a5b306182a4f90d9349abd106badfd139796a4785bac",
+        "import_translations": {}
+      },
+      {
+        "source": "reports/technical_report_20261001/case_adaptation_20261001/coastal/source/torch_src/neuralpom/cores/explicit/momentum.py",
+        "source_sha256": "456d1c0d0b776ed5c368bed7105ed2556ba74e37501b05efc146d9f1c70e4297",
+        "target": "kernels/coastal_explicit_momentum.py",
+        "exported_sha256": "456d1c0d0b776ed5c368bed7105ed2556ba74e37501b05efc146d9f1c70e4297",
+        "import_translations": {}
+      },
+      {
+        "source": "reports/technical_report_20261001/case_adaptation_20261001/coastal/source/torch_src/neuralpom/cores/explicit/tracers.py",
+        "source_sha256": "b1e0d53b61998ee4fc29584d562cbb08ba76f5cafb02b294efe8c3aa0f62c888",
+        "target": "kernels/coastal_explicit_tracers.py",
+        "exported_sha256": "b1e0d53b61998ee4fc29584d562cbb08ba76f5cafb02b294efe8c3aa0f62c888",
+        "import_translations": {}
+      },
+      {
+        "source": "reports/technical_report_20261001/case_adaptation_20261001/coastal/source/torch_src/neuralpom/cores/explicit/time_loop.py",
+        "source_sha256": "556b33cf724e4ed0026b1feb9e5863b7a0d72aa4ca4b6049d806aa2482b2d500",
+        "target": "kernels/coastal_explicit_time_loop.py",
+        "exported_sha256": "556b33cf724e4ed0026b1feb9e5863b7a0d72aa4ca4b6049d806aa2482b2d500",
+        "import_translations": {}
+      },
+      {
+        "source": "reports/technical_report_20261001/case_adaptation_20261001/coastal/source/torch_src/neuralpom/cores/implicit_p0_fixed/momentum.py",
+        "source_sha256": "184d4a0abf963b8039f9cb3ee0b5910ee8db2623cd942835e69bdee1220fdd7c",
+        "target": "kernels/coastal_implicit_momentum.py",
+        "exported_sha256": "184d4a0abf963b8039f9cb3ee0b5910ee8db2623cd942835e69bdee1220fdd7c",
+        "import_translations": {}
+      },
+      {
+        "source": "reports/technical_report_20261001/case_adaptation_20261001/coastal/source/torch_src/neuralpom/cores/implicit_p0_fixed/tracers.py",
+        "source_sha256": "484131b5937ab6e2930b9f63fc40766890a2e98a15ad5c15a81ff6042c2dea30",
+        "target": "kernels/coastal_implicit_tracers.py",
+        "exported_sha256": "484131b5937ab6e2930b9f63fc40766890a2e98a15ad5c15a81ff6042c2dea30",
+        "import_translations": {}
+      },
+      {
+        "source": "reports/technical_report_20261001/case_adaptation_20261001/coastal/source/torch_src/neuralpom/cores/implicit_p0_fixed/time_loop.py",
+        "source_sha256": "168add3a130b9cabf92aa32090fca280b37daaf342eb44162c3927c9c2857c24",
+        "target": "kernels/coastal_implicit_time_loop.py",
+        "exported_sha256": "f75daa8c2e10bbec21bbb840255759b8a29b2b94bf585e6843c334a7b6d7f65a",
+        "import_translations": {
+          "from .autograd import": "from neuralpom.cores.implicit_p0_fixed.autograd import"
+        }
+      },
+      {
+        "source": "reports/technical_report_20261001/case_adaptation_20261001/coastal/source/torch_src/neuralpom/cores/explicit/baroclinic.py",
+        "source_sha256": "128a0fefb8a2bff65b67b4729d50666447301c10056d4686544ec827e7465942",
+        "target": "kernels/coastal_explicit_baroclinic.py",
+        "exported_sha256": "128a0fefb8a2bff65b67b4729d50666447301c10056d4686544ec827e7465942",
+        "import_translations": {}
+      }
+    ],
+    "seamount": [
+      {
+        "source": "reports/technical_report_20261001/case_adaptation_20261001/seamount/source/seamount_boundary.py",
+        "source_sha256": "1d53a018e03e4829f13a416e815ca19a11c0894535fe4c7ba253e13c8fcfb480",
+        "target": "seamount_boundary.py",
+        "exported_sha256": "1d53a018e03e4829f13a416e815ca19a11c0894535fe4c7ba253e13c8fcfb480",
+        "import_translations": {}
+      }
+    ],
+    "jiaozhou_bay": [
+      {
+        "source": "reports/technical_report_20261001/case_adaptation_20261001/jiaozhou_bay/source/jzb_boundary.py",
+        "source_sha256": "b4f6b0febb720442bdcd1662fea246781b48f7374ce70b13a123f71c03766548",
+        "target": "jzb_boundary.py",
+        "exported_sha256": "b4f6b0febb720442bdcd1662fea246781b48f7374ce70b13a123f71c03766548",
+        "import_translations": {
+          "from neuralpom.cores.explicit.baroclinic import": "from .kernels.coastal_explicit_baroclinic import"
+        }
+      },
+      {
+        "source": "reports/technical_report_20261001/case_adaptation_20261001/jiaozhou_bay/source/jzb_compat.py",
+        "source_sha256": "0419770ebed64c278b671f48d4971b2e2440b7bcfb9cf1c5f5849c17c680ea7b",
+        "target": "jzb_compat.py",
+        "exported_sha256": "0419770ebed64c278b671f48d4971b2e2440b7bcfb9cf1c5f5849c17c680ea7b",
+        "import_translations": {
+          "from fortran_compat import": "from .fortran_compat import"
+        }
+      },
+      {
+        "source": "reports/technical_report_20261001/case_adaptation_20261001/jiaozhou_bay/runs/jiaozhou_bay/amph_pom.dat",
+        "source_sha256": "4341da5432389865380ba43fcd5bff5b952ac10e5269d1d7873b3dc0af6db6b2",
+        "target": "data/jzb_amph_pom.dat",
+        "exported_sha256": "4341da5432389865380ba43fcd5bff5b952ac10e5269d1d7873b3dc0af6db6b2",
+        "import_translations": {}
+      }
+    ]
+  },
+  "scope": "opt-in instance policies; measured forward physical comparisons"
+}

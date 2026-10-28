@@ -1,0 +1,6 @@
+from .core import POM2K_Core
+
+ExplicitPOM2KCore = POM2K_Core
+EXPLICIT_NUMERICS_VERSION = POM2K_Core.NUMERICS_VERSION
+
+__all__ = ["POM2K_Core", "ExplicitPOM2KCore", "EXPLICIT_NUMERICS_VERSION"]

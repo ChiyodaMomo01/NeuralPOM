@@ -1,0 +1,39 @@
+{
+  "core": "explicit",
+  "frequency": "1day",
+  "seed": 0,
+  "world_size": 8,
+  "data_root": "../../data/reference/explicit",
+  "run_root": "../../runs/explicit_1day/seed0",
+  "acceleration": {
+    "mode": "eager",
+    "cg_backend": "torch",
+    "compiled_kernels": [],
+    "cuda_graph": false
+  },
+  "wandb": {
+    "entity": null,
+    "project": "neuralpom-v1",
+    "mode": "offline"
+  },
+  "losses": [
+    {
+      "name": "weighted_mse",
+      "weight": 1.0,
+      "scale": 1.0
+    }
+  ],
+  "stages": {
+    "midtrain": {
+      "epochs": 3,
+      "base_stride_days": 18,
+      "horizons": [
+        4
+      ]
+    },
+    "posttrain": {
+      "gradient_mode": "full_window"
+    }
+  },
+  "supervision": "post-correction-only-v1"
+}

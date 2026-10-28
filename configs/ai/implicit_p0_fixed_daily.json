@@ -1,0 +1,13 @@
+{
+  "schema": "neuralpom-ai-daily-v1",
+  "core": "implicit_p0_fixed",
+  "world_size": 8,
+  "seed": 0,
+  "data_root": "../../data/reference/implicit_p0_fixed",
+  "run_root": "../../runs/ai/implicit_p0_fixed/triton/seed0",
+  "wandb": {
+    "mode": "offline",
+    "project": "neuralpom-ai-baselines",
+    "entity": null
+  }
+}

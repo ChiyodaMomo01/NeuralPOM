@@ -1,0 +1,120 @@
+{
+  "schema": "neuralpom-ai-daily-v1",
+  "core": "implicit_p0_fixed",
+  "seed": 0,
+  "world_size": 8,
+  "frequency": "1day",
+  "interval_seconds": 86400,
+  "grid": {
+    "im": 90,
+    "jm": 82
+  },
+  "split": {
+    "train_members": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "train_start_day": 1000,
+    "train_end_day": 7000,
+    "validation_members": [
+      7
+    ],
+    "validation_start_day": 7000,
+    "validation_end_day": 8000,
+    "validation_stride_days": 60,
+    "evaluation_members": [
+      7
+    ],
+    "evaluation_start_day": 8000,
+    "evaluation_end_day": 9000,
+    "evaluation_starts": [
+      8000,
+      8064,
+      8128,
+      8192,
+      8256,
+      8320,
+      8384,
+      8448
+    ]
+  },
+  "stages": {
+    "pretrain": {
+      "max_epochs": 40,
+      "patience": 5,
+      "min_delta": 0.0,
+      "stride_days": 6,
+      "checkpoint_every_updates": 100
+    },
+    "posttrain": {
+      "epochs": 20,
+      "rollout_days": 10,
+      "tbptt_hours": 24,
+      "stride_days": 60,
+      "checkpoint_every_updates": 1,
+      "patience": 5,
+      "min_delta": 0.0
+    }
+  },
+  "optimizer": {
+    "pretrain_lr": 5e-05,
+    "pretrain_final_lr": 5e-06,
+    "midtrain_lr": 3e-06,
+    "posttrain_lr": 3e-06,
+    "weight_decay": 0.0001,
+    "clip_norm": 10.0,
+    "warmup_epochs": 3,
+    "posttrain_warmup_updates": 50
+  },
+  "model": {
+    "architecture": "simvp",
+    "spatial_hidden_dim": 256,
+    "temporal_hidden_dim": 512,
+    "num_spatial_layers": 4,
+    "num_temporal_layers": 8,
+    "upstream_root": "data/upstream/TurbL1_AI4Science",
+    "upstream_commit": "58615378c13f3760bc0988e5e4d0f11e25a591b5"
+  },
+  "normalization": {
+    "minimum_scale": 1e-06
+  },
+  "wandb": {
+    "mode": "offline",
+    "project": "neuralpom-ai-baselines",
+    "entity": null
+  },
+  "evaluation": {
+    "days": 100,
+    "starts": [
+      8000,
+      8032,
+      8064,
+      8096,
+      8128,
+      8160,
+      8192,
+      8224,
+      8256,
+      8288,
+      8320,
+      8352,
+      8384,
+      8416,
+      8448,
+      8480
+    ],
+    "member": 7,
+    "reserved_days": [
+      8800,
+      8900
+    ]
+  },
+  "data_root": "../../../data/reference/implicit_p0_fixed",
+  "run_root": "../../../runs/ai_suite/implicit_p0_fixed/simvp/seed0",
+  "state_stats": "../../../runs/ai_suite/implicit_p0_fixed/simvp/seed0/assets/state_stats.npz"
+}

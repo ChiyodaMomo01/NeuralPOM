@@ -1,0 +1,105 @@
+{
+  "schema": "neuralpom-evaluation-v2",
+  "inference": "bare_eager",
+  "correction_policies": [
+    "raw",
+    "constrained",
+    "density75"
+  ],
+  "horizons_days": [
+    100
+  ],
+  "cases": [
+    {
+      "member": 7,
+      "start_day": 8000
+    },
+    {
+      "member": 7,
+      "start_day": 8032
+    },
+    {
+      "member": 7,
+      "start_day": 8064
+    },
+    {
+      "member": 7,
+      "start_day": 8096
+    },
+    {
+      "member": 7,
+      "start_day": 8128
+    },
+    {
+      "member": 7,
+      "start_day": 8160
+    },
+    {
+      "member": 7,
+      "start_day": 8192
+    },
+    {
+      "member": 7,
+      "start_day": 8224
+    },
+    {
+      "member": 7,
+      "start_day": 8256
+    },
+    {
+      "member": 7,
+      "start_day": 8288
+    },
+    {
+      "member": 7,
+      "start_day": 8320
+    },
+    {
+      "member": 7,
+      "start_day": 8352
+    },
+    {
+      "member": 7,
+      "start_day": 8384
+    },
+    {
+      "member": 7,
+      "start_day": 8416
+    },
+    {
+      "member": 7,
+      "start_day": 8448
+    },
+    {
+      "member": 7,
+      "start_day": 8480
+    }
+  ],
+  "groups": [
+    {
+      "id": "implicit_p0_fixed_1h",
+      "core": "implicit_p0_fixed",
+      "frequency": "1h",
+      "config": "configs/local/implicit_1h.json"
+    },
+    {
+      "id": "implicit_p0_fixed_1day",
+      "core": "implicit_p0_fixed",
+      "frequency": "1day",
+      "config": "configs/local/implicit_1day.json"
+    },
+    {
+      "id": "explicit_1h",
+      "core": "explicit",
+      "frequency": "1h",
+      "config": "configs/local/explicit_1h.json"
+    },
+    {
+      "id": "explicit_1day",
+      "core": "explicit",
+      "frequency": "1day",
+      "config": "configs/local/explicit_1day.json"
+    }
+  ],
+  "output_root": "runs/evaluation_100d"
+}

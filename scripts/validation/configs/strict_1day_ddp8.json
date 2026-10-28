@@ -1,0 +1,51 @@
+{
+  "data_root": "../../../data/reference/implicit_p0_fixed",
+  "split": {
+    "train_members": [
+      0
+    ],
+    "train_start_day": 1000,
+    "train_end_day": 1047,
+    "validation_start_day": 7000,
+    "validation_end_day": 7005,
+    "evaluation_starts": [
+      8000
+    ]
+  },
+  "stages": {
+    "pretrain": {
+      "max_epochs": 1,
+      "checkpoint_every_updates": 1
+    },
+    "midtrain": {
+      "epochs": 1,
+      "checkpoint_every_updates": 1,
+      "horizons": [
+        4
+      ]
+    },
+    "posttrain": {
+      "epochs": 1,
+      "checkpoint_every_updates": 1
+    }
+  },
+  "acceleration": {
+    "mode": "strict_vertical_compiled",
+    "cg_backend": "triton",
+    "compiled_kernels": [
+      "proft"
+    ]
+  },
+  "wandb": {
+    "mode": "offline",
+    "project": "neuralpom-v1",
+    "entity": null
+  },
+  "frequency": "1day",
+  "world_size": 8,
+  "model": {
+    "hidden_dim": 256
+  },
+  "run_root": "../../../runs/validation/strict_1day_ddp8",
+  "supervision": "post-correction-only-v1"
+}

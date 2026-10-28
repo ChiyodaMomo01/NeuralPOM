@@ -1,0 +1,74 @@
+{
+  "schema": "neuralpom-ai-five-model-suite-v1",
+  "suite_root": "runs/ai_suite",
+  "source": ".",
+  "models": [
+    {
+      "architecture": "triton",
+      "config": "configs/ai_daily/suite_20261008/triton.json",
+      "config_sha256": "92a31d9ca823ff621dc05a40b09c553de9765881c9b335f3380b9681272b7900"
+    },
+    {
+      "architecture": "resunet",
+      "config": "configs/ai_daily/suite_20261008/resunet.json",
+      "config_sha256": "1fde594f5fc803132d47a284473b2643cf872141fa96a661f03d4ce1684aa39a"
+    },
+    {
+      "architecture": "simvp",
+      "config": "configs/ai_daily/suite_20261008/simvp.json",
+      "config_sha256": "7b4c36be7be815c5bf4ab9abb25b299fb283968813f815c95b33f56366dde486"
+    },
+    {
+      "architecture": "convlstm",
+      "config": "configs/ai_daily/suite_20261008/convlstm.json",
+      "config_sha256": "b9cb57c00d6d92322bf370eeef3168c8a2206dc08528541065ef3d9d4fbd0328"
+    },
+    {
+      "architecture": "pastnet",
+      "config": "configs/ai_daily/suite_20261008/pastnet.json",
+      "config_sha256": "a492f8a1ef2156cba9c753563e0cd3ea0123cf45be259ffa54c053d2484d5fe0"
+    }
+  ],
+  "training_order": [
+    "resunet",
+    "simvp",
+    "convlstm",
+    "pastnet"
+  ],
+  "world_size": 8,
+  "gpus": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "normalization_sha256": "062107fae9bebd2d1482f6dd764eaf1f186a8f73dc6b0aa8334671cf3d1c2b87",
+  "evaluation_days": 100,
+  "evaluation_origins": [
+    8000,
+    8032,
+    8064,
+    8096,
+    8128,
+    8160,
+    8192,
+    8224,
+    8256,
+    8288,
+    8320,
+    8352,
+    8384,
+    8416,
+    8448,
+    8480
+  ],
+  "upstream_commit": "58615378c13f3760bc0988e5e4d0f11e25a591b5",
+  "canonical_pretrain": "validation_best",
+  "canonical_posttrain": "last_completed",
+  "triton_posttrain_selection": "user_authorized_plateau_latest_committed_partial_epoch20",
+  "triton_historical_best_posttrain_weights_available": false
+}

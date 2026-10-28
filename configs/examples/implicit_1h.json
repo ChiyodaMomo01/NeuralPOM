@@ -1,0 +1,38 @@
+{
+  "core": "implicit_p0_fixed",
+  "frequency": "1h",
+  "seed": 0,
+  "world_size": 8,
+  "data_root": "../../data/reference/implicit_p0_fixed",
+  "run_root": "../../runs/implicit_1h/seed0",
+  "acceleration": {
+    "mode": "strict_vertical_compiled",
+    "cg_backend": "triton",
+    "compiled_kernels": [
+      "proft"
+    ]
+  },
+  "wandb": {
+    "project": "neuralpom-v1",
+    "mode": "offline",
+    "entity": null
+  },
+  "losses": [
+    {
+      "name": "weighted_mse",
+      "weight": 1.0,
+      "scale": 1.0
+    }
+  ],
+  "stages": {
+    "midtrain": {
+      "horizons": [
+        4
+      ]
+    },
+    "posttrain": {
+      "gradient_mode": "last_correction_only"
+    }
+  },
+  "supervision": "post-correction-only-v1"
+}

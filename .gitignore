@@ -1,0 +1,45 @@
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+# External reference data and generated artifacts.
+/data/
+logs/
+outputs/
+simulation_ensemble_20y/
+benchmark_outputs/
+runs/
+*.log
+*.pid
+*.tmp
+tmp_remote_scripts/
+tmp_*/
+*.pth
+*.pt
+*.ckpt
+checkpoints/
+checkpoints_model/
+docs/.vitepress/dist/
+docs/.vitepress/cache/
+node_modules/
+reports/
+wandb/
+.venv/
+.pytest_cache/
+.codex_backups/
+.DS_Store
+validation_results/
+*.egg-info/
+/build/
+/dist/
+
+# Local analysis and experiment scratch
+/output/
+/refine-logs/
+/archive/
+/research/
+*.bundle
+
+# User-specific data paths and output locations
+/configs/local/
+.env
+.env.*

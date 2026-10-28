@@ -1,0 +1,116 @@
+{
+  "schema": "neuralpom-evaluation-v2",
+  "inference": "bare_eager",
+  "correction_policies": [
+    "raw",
+    "constrained",
+    "density75"
+  ],
+  "horizons_days": [
+    50,
+    200,
+    300
+  ],
+  "cases": [
+    {
+      "member": 7,
+      "start_day": 8000
+    },
+    {
+      "member": 7,
+      "start_day": 8032
+    },
+    {
+      "member": 7,
+      "start_day": 8064
+    },
+    {
+      "member": 7,
+      "start_day": 8096
+    },
+    {
+      "member": 7,
+      "start_day": 8128
+    },
+    {
+      "member": 7,
+      "start_day": 8160
+    },
+    {
+      "member": 7,
+      "start_day": 8192
+    },
+    {
+      "member": 7,
+      "start_day": 8224
+    },
+    {
+      "member": 7,
+      "start_day": 8256
+    },
+    {
+      "member": 7,
+      "start_day": 8288
+    },
+    {
+      "member": 7,
+      "start_day": 8320
+    },
+    {
+      "member": 7,
+      "start_day": 8352
+    },
+    {
+      "member": 7,
+      "start_day": 8384
+    },
+    {
+      "member": 7,
+      "start_day": 8416
+    },
+    {
+      "member": 7,
+      "start_day": 8448
+    },
+    {
+      "member": 7,
+      "start_day": 8480
+    }
+  ],
+  "groups": [
+    {
+      "id": "implicit_p0_fixed_1h",
+      "core": "implicit_p0_fixed",
+      "frequency": "1h",
+      "config": "configs/v1/1h.json"
+    },
+    {
+      "id": "implicit_p0_fixed_1day",
+      "core": "implicit_p0_fixed",
+      "frequency": "1day",
+      "config": "configs/v1/1day.json"
+    },
+    {
+      "id": "explicit_1h",
+      "core": "explicit",
+      "frequency": "1h",
+      "config": "configs/v1/explicit_1h.json"
+    },
+    {
+      "id": "explicit_1day",
+      "core": "explicit",
+      "frequency": "1day",
+      "config": "configs/v1/explicit_1day.json"
+    }
+  ],
+  "output_root": "runs/paired_optimized_20260927",
+  "reuse": {
+    "root": "runs/paired_20260927",
+    "protocol_sha256": "a99459f9e7bad755268084be9e3fdb9a978e3102f82fa5324adee6e3fbbbfa02",
+    "policies": [
+      "raw",
+      "constrained",
+      "physics"
+    ]
+  }
+}

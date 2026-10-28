@@ -1,0 +1,2 @@
+*.svg -whitespace
+*.csv whitespace=cr-at-eol
