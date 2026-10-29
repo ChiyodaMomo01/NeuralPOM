@@ -18,7 +18,7 @@ A coarse ocean model misses parts of the resolved evolution of a finer reference
 
 The primary experiment is a wind-driven double gyre. Each physical core has its own eight-member fine-grid reference ensemble, restricted consistently to the coarse forecast grid. The fine horizontal grid is **354 × 322**, and the coarse grid is **90 × 82**, with **15 active vertical layers**. (Manuscript, Section 3.1.)
 
-<figure><img src="/figures/developed_surface_fields.png" alt="Developed double-gyre reference fields: normalized vorticity, sea-surface elevation, temperature, zonal and meridional velocity, and salinity" loading="lazy"><figcaption>Developed reference surface fields, reproduced from the manuscript. The homepage shows a detail of the temperature panel; this is the complete figure with axes and color scales.</figcaption></figure>
+<figure><img src="/figures/developed_surface_fields.png" alt="Developed double-gyre reference fields: normalized vorticity, sea-surface elevation, temperature, zonal and meridional velocity, and salinity" loading="lazy"><figcaption>Developed reference surface fields, reproduced from the manuscript. The full panels retain their axes and color scales.</figcaption></figure>
 
 ## Three parts of the method
 

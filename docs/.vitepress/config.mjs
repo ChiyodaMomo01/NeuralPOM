@@ -77,7 +77,7 @@ export default defineConfig({
   sitemap: { hostname: "https://neural-pom.vercel.app" },
   head: [
     ["link", { rel: "icon", href: "/logo.png" }],
-    ["meta", { name: "theme-color", content: "#fcfaf7" }],
+    ["meta", { name: "theme-color", content: "#fdfcf9" }],
     ["meta", { property: "og:type", content: "website" }],
     [
       "meta",
@@ -88,7 +88,7 @@ export default defineConfig({
       {
         property: "og:description",
         content:
-          "Ocean dynamics. Learned corrections. Explore the science, implementation, and reproduction workflow.",
+          "NeuralPOM documentation: physical formulation, staged learning, and reproducible experiments.",
       },
     ],
     [
@@ -125,8 +125,8 @@ export default defineConfig({
     logo: "/logo.png",
     search: { provider: "local" },
     nav: [
-      { text: "The guide", link: "/guide/roadmap", activeMatch: "/guide/" },
-      { text: "The method", link: "/hybrid/overview", activeMatch: "/hybrid/" },
+      { text: "Guide", link: "/guide/roadmap", activeMatch: "/guide/" },
+      { text: "Method", link: "/hybrid/overview", activeMatch: "/hybrid/" },
       { text: "Reproduction", link: "/reproduction" },
       { text: "Paper", link: "/paper" },
     ],
@@ -145,8 +145,7 @@ export default defineConfig({
       text: "Improve this page on GitHub",
     },
     footer: {
-      message:
-        "Differentiable ocean dynamics · Constrained neural corrections · Staged learning",
+      message: "",
       copyright: "NeuralPOM · Code licensed under Apache-2.0",
     },
   },
