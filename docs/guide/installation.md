@@ -5,6 +5,8 @@
 **Python 3.10 or newer** is required. Install a CUDA-capable PyTorch distribution for GPU training, then install NeuralPOM from the repository root:
 
 ```bash
+git clone https://github.com/ChiyodaMomo01/NeuralPOM.git
+cd NeuralPOM
 python -m venv .venv
 source .venv/bin/activate
 python -m pip install -e '.[test]'

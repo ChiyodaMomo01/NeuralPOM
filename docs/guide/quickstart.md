@@ -1,4 +1,6 @@
-# Quick start
+# Your first NeuralPOM workflow
+
+Start by resolving a configuration and inspecting its plan. Then prepare the matching reference data, train the three stages, and evaluate a frozen model. Run all commands below from the repository root.
 
 ## Install and select a configuration
 
@@ -18,6 +20,12 @@ python scripts/v1/plan.py --config configs/local/explicit_1day.json
 ```
 
 This command reports sample counts and update budgets without loading reference arrays or starting training.
+
+## Match the reference data
+
+Open the [ModelScope dataset](https://www.modelscope.cn/datasets/chiyodamomo01/NeuralPOM) and follow its current asset and access instructions. Point `data_root` at the extracted directory containing `manifest.json` and the member folders, using the reference ensemble for your selected physical core. Preserve the [directory layout](../data/format.md) when extracting archives.
+
+The plan command can run before these arrays are available. Preparation and training read the reference arrays; frozen evaluation also reads the matching weights and calibration. See the [asset checklist](../reproduction.md#required-assets).
 
 ## Prepare and train
 
