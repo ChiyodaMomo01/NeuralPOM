@@ -1,11 +1,29 @@
-# 旧瓶新酒：NeuralPOM——具有可微动力学与分阶段学习的混合海洋预报模式
+# 旧瓶新酒——NeuralPOM：具有可微动力学与分阶段学习的混合海洋预报模式
 
-> 中文全译稿（对应 36 页英文定稿 `main.tex` + `content/*.tex` / `NeuralPOM_Report.pdf`）。  
-> 图片路径相对于本目录（`figures/*.png`）。全文包含正文 5 图 5 表（图1–图5、表1–表5）与附录 3 图 3 表（图6–图8、表6–表8），公式与图表编号同英文 PDF 完全一致。
+**New Wine in an Old Bottle — NeuralPOM: A Hybrid Ocean Forecast Model with Differentiable Dynamics and Staged Learning**
+
+**舒睿骐（Ruiqi Shu）**$^{1,2,\dagger}$，**刘光亮（Guangliang Liu）**$^{1,3,4,\dagger}$，**苟睿健（Ruijian Gou）**$^{5,\dagger}$，**高天润（Tianrun Gao）**$^{6}$，**温浩珉（Haomin Wen）**$^{7}$，**李昊（Hao Li）**$^{8,7,2,*}$，**黄小猛（Xiaomeng Huang）**$^{1,*}$
+
+$^1$ 清华大学地球系统科学系，北京，中国（Department of Earth System Science, Tsinghua University, Beijing, China）  
+$^2$ 上海科学智能研究院，上海，中国（Shanghai Academy of Artificial Intelligence for Science, Shanghai, China）  
+$^3$ 山东省科学院海洋仪器仪表研究所，物理海洋教育部重点实验室，青岛，中国（State Key Laboratory of Physical Oceanography, Institute of Oceanographic Instrumentation, Shandong Academy of Sciences, Qingdao, China）  
+$^4$ 齐鲁工业大学（山东省科学院）山东省计算中心（国家超级计算济南中心），算力互联网与信息安全教育部重点实验室，济南，中国（Key Laboratory of Computing Power Network and Information Security, Ministry of Education, Shandong Computer Science Center, Qilu University of Technology (Shandong Academy of Sciences), Jinan, China）  
+$^5$ 崂山实验室海洋大数据与人工智能研究部，青岛，中国（Department of Ocean Big Data and Artificial Intelligence, Laoshan National Laboratory, Qingdao, China）  
+$^6$ 香港大学计算与数据科学学院（School of Computing and Data Science, The University of Hong Kong）  
+$^7$ 上海创智学院，上海，中国（Shanghai Innovation Institute, Shanghai, China）  
+$^8$ 复旦大学人工智能创新与产业研究院，上海，中国（Artificial Intelligence Innovation and Incubation Institute, Fudan University, Shanghai, China）
+
+$^\dagger$ 上述作者贡献相同。  
+$^*$ 通信作者：李昊（[lihao_lh@fudan.edu.cn](mailto:lihao_lh@fudan.edu.cn)）、黄小猛（[hxm@tsinghua.edu.cn](mailto:hxm@tsinghua.edu.cn)）。
+
+> 中文全译稿（对应 38 页最新英文定稿 `main.tex` + `content/*.tex` / `NeuralPOM_Report.pdf`）。  
+> 图片路径相对于本目录（`figures/*.png`）。全文包含正文 5 图 5 表（图1–图5、表1–表5）与附录 4 图 3 表（图6–图9、表6–表8），章节、公式、图表及参考文献编号（`[1]`–`[35]`）与最新英文 PDF 完全一致。
+
+---
 
 ## 摘要
 
-数值海洋环流模式通过积分三维原始方程预报海洋状态，但在涡旋允许（eddy-permitting）尺度下，有限的网格分辨率和经验次网格参数化限制了其预报技巧。纯数据驱动的神经网络模型可以直接向前推进海洋状态，然而在长时效积分中会累积位相误差、破坏体积与示踪物守恒，并衰减小尺度变率。本文提出混合海洋预报模式 NeuralPOM，将普林斯顿海洋模式（Princeton Ocean Model，POM）的可微显式模态分裂（`Explicit`）及半隐式自由面（`Implicit`）动力框架与受守恒约束的神经校正器相耦合。在逐小时或逐日间隔上，神经网络在保持水柱积分体积输运守恒、等 $\sigma$ 层积分热量与盐量守恒以及蛙跳时间层一致性的条件下，更新斜压速度切变、位温和盐度；随后海水密度由非线性状态方程诊断更新，而物理求解器继续推进自由面高度、垂向速度与湍流垂向混合。基于风生双涡旋海盆（`double-gyre`）的细网格参考集合，我们通过包含单步预训练（`Pretrain`）、跨动力框架的多步可微训练（`Midtrain`）和闭环滚动训练（`Posttrain`）的三阶段训练流程训练校正器；受控训练路线消融表明，在逐小时显式模态分裂耦合下，在 `Midtrain` 期间跨可微物理求解器反向传播梯度是稳定长时效温盐与环流演化的关键。物理诊断实验表明，在逐小时耦合下，未经协调的位温与盐度残差会经由状态方程投影为密度异常，并激发虚假的近网格斜压压强梯度倾向。将每一层的示踪物增量相对于局地状态方程密度梯度进行正交分解，并施加**密度法向阻尼**（Density-Normal Damping，`DND`）以衰减改变密度的跨等密面（diapycnal）分量，可在完整保留等密面密度补偿（isopycnal）水团修正的同时抑制这一小尺度斜压反馈。在 100 天预报中，NeuralPOM 在全部预报场上均较粗网格次网格参数化方案与直接神经网络预报器降低了均方根误差，在维持近网格尺度动能的同时改善了中尺度涡旋的位相对齐度。
+数值海洋环流模式通过积分三维原始方程预报海洋状态，但在涡旋允许（eddy-permitting）尺度下，有限的网格分辨率和经验次网格参数化限制了其预报技巧。纯数据驱动的神经网络预报器能够以较低的计算代价推进海洋状态，然而在长时效积分中会累积轨迹漂移、破坏体积与示踪物守恒，并衰减小尺度变率。本文提出混合海洋预报模式 NeuralPOM，将普林斯顿海洋模式（Princeton Ocean Model，POM）的可微显式模态分裂（`Explicit`）及半隐式自由面（`Implicit`）实现同受守恒约束的神经校正器相耦合。物理动力框架跨时间步推进三维原始方程，而神经网络在保持体积、热量和盐量守恒约束的条件下周期性校正水平速度、位温和盐度。我们在风生双涡旋海盆（`double-gyre`）中构建了逾 10 万个模式日的细网格参考数据集，并提出了面向混合海洋模式的三阶段训练流程，依次包含离线单步预训练、跨物理动力框架的多步可微训练以及多日闭环滚动训练。在 100 天预报中，NeuralPOM 在全部预报变量上均较粗网格物理参数化方案与直接神经网络预报器降低了均方根误差，在维持近网格尺度动能的同时改善了中尺度涡旋的位相对齐度。分阶段训练与受控路线消融实验证实了各训练阶段的互补作用：在多步训练期间跨可微动力框架反向传播梯度稳定了逐小时耦合下的温盐与环流演化，而闭环滚动训练抑制了多日积分视界上的累积轨迹漂移。此外，物理诊断实验揭示，在高频耦合下，未经协调的位温与盐度增量会经由非线性状态方程投影为密度异常，并激发虚假的斜压压强梯度倾向。基于这一机制，我们提出**密度法向阻尼**（Density-Normal Damping，`DND`），选择性衰减每一层示踪物增量中改变密度的跨等密面（diapycnal）分量，同时完整保留等密面密度补偿（isopycnal）水团修正，从而在全部预报场上进一步提升了 100 天预报技巧。
 
 ---
 
@@ -30,6 +48,7 @@
   - 5.3 100 天闭环验证：与各向同性均匀缩放的对比
 - **6 讨论**
 - **致谢 / 数据与代码可用性**
+- **参考文献**
 - **附录A 控制方程与数值离散格式**
 - **附录B 状态校正接口、目标函数与训练**
 - **附录C 逐层约束密度法向投影**
@@ -41,13 +60,13 @@
 
 ## 1 引言
 
-海洋物理状态预报需要预测水平与垂向海流、自由面高度、位温、盐度、海水密度及湍流混合的三维耦合演变。业务化与气候尺度的海洋模式通过在给定大气强迫和海盆几何条件下数值积分静力、Boussinesq 原始方程来求解这一问题 [FoxKemper2019OceanModels, Heimbach2025OceanForecasting]。然而，在计算成本允许开展延伸期集合或数月积分的网格间距下，数值模式只能部分分辨主导海洋绝大部分动能与示踪物输运的斜压不稳定过程和中尺度涡旋 [Hewitt2020Mesoscale]，而经验次网格闭合必须在数值稳定性与可分辨尺度的过度耗散之间作出平衡。相反，纯数据驱动的神经网络预报器能够以数值求解器极小一部分的计算代价推进逐日海洋状态 [Cui2025EddyingOcean, ElAouni2025GLONET, Holmberg2025SeaCast, Niu2026FuXiOcean]，但在数周以上的自回归积分中，它们表现出复合轨迹漂移 [Ross2023_8, Kamm2026Atlantic]、逐点均方误差（MSE）目标下近网格中尺度变率的渐进衰减 [Leith1974MonteCarlo]，以及弱强迫内部层中体积、热量和盐量守恒的破坏。
+海洋物理状态预报需要预测水平与垂向海流、自由面高度、位温、盐度、海水密度及湍流混合的三维耦合演变。业务化与气候尺度的海洋模式通过在给定大气强迫和海盆几何条件下数值积分静力、Boussinesq 原始方程来求解这一问题 [1, 2]。然而，在计算成本允许开展延伸期集合或数月积分的网格间距下，数值模式只能部分分辨主导海洋绝大部分动能与示踪物输运的斜压不稳定过程和中尺度涡旋 [3]，而经验次网格闭合必须在数值稳定性与可分辨尺度的过度耗散之间作出平衡。相反，纯数据驱动的神经网络预报器能够以低于数值求解器的计算代价推进逐日海洋状态 [4–7]，但在数周以上的自回归积分中，它们表现出复合轨迹漂移 [4, 5, 8]、逐点均方误差（MSE）目标下近网格中尺度变率的渐进衰减 [8–10]，且在内部层缺乏内建的体积、热量与盐量守恒约束 [10, 11]。
 
-物理–机器学习混合模型旨在将数值求解器的守恒定律和动力平衡同未分辨过程的数据驱动校正结合起来。近期研究已在理想化和区域海洋模式中嵌入了学习得到的次网格参数化方案 [BoltonZanna2019, ZannaBolton2020, GuillauminZanna2021, Perezhogin2024Stable]，在大气环流模式中实现了端到端可微训练 [Kochkov2024NeuralGCM]，并将物理引导的神经状态校正器与同化模块同海洋动力框架相耦合 [Shu2025PhysicsGuidedMHW, Zanna2025HybridOceanFramework, Shu2026OceanE2E, Shu2026HybridOM]。然而，迄今大多数海洋混合建模研究仍集中在理想化准地转、正压或浅水配置上，对于神经状态更新如何与完整的三维地形跟随原始方程环流模式——同时预报正压与斜压速度模态、自由面、活跃位温与盐度、非线性状态方程（EOS）以及双方程垂向湍流闭合——相互作用，仍有待系统阐明。
+由此产生的一个自然问题是：能否将数值环流模式与机器学习方法相结合，构建兼顾二者优势的混合框架，在保留数值求解器守恒定律与动力平衡的同时利用数据驱动校正弥补未分辨物理过程？近期研究已在理想化和区域海洋模式中嵌入了学习得到的次网格参数化方案 [12–17]，在大气环流模式中实现了端到端可微训练 [10]，并将物理引导的神经校正器与同化模块同海洋动力框架相耦合 [11, 18–20]。然而，迄今大多数海洋混合建模研究仍集中在理想化准地转、正压或浅水配置上，对于神经状态更新如何与完整的三维地形跟随原始方程环流模式——同时预报正压与斜压速度模态、自由面、活跃位温与盐度、非线性状态方程（EOS）以及双方程垂向湍流闭合——相互作用，仍有待系统阐明。
 
-将神经校正器耦合至三维原始方程海洋模式会引入简化模型中不会出现的三个物理与数值挑战。第一，跨时间步推进求解器需要完整的多时间层状态历史，包括当前与历史蛙跳时间层、正压–斜压模态耦合输运量以及湍动能和混合长度场；破坏蛙跳时间层一致性或水柱体积收支的无约束状态更新会激发计算模态与快速外重力波。第二，位温和盐度是活跃的热力学变量，它们通过非线性 EOS 和静力斜压压强梯度力进入水平动量方程，同时通过湍流闭合中的浮力频率调制垂向粘性与扩散系数 [MellorYamada1982]。因此，即便一次示踪物增量在单个时间步上降低了瞬时逐点误差，仍可能引入小尺度密度异常，在后续积分步中产生虚假的斜压压强梯度倾向并扰乱垂向混合。第三，由于每次校正都会改变物理框架访问的状态轨迹，仅在离线单步目标上训练的网络在闭环积分期间会遭遇分布偏移 [Ross2023_8, Ouala2024OnlineCalibration]，需要结合跨动力框架的多步可微训练与闭环滚动训练的分阶段训练流程 [Frezat2022_10, List2025, Yan2025AdjointOnline]。
+将神经校正器耦合至三维原始方程海洋模式会引入简化模型中不会出现的三个物理与数值挑战。第一，由于每次校正都会改变物理动力框架访问的状态轨迹，仅在离线单步目标上训练的网络在闭环积分期间会遭遇分布偏移 [15, 21]，需要结合跨动力框架的多步可微训练与闭环滚动训练的分阶段训练流程 [22–24]。第二，跨时间步推进求解器需要完整的多时间层状态历史，包括当前与历史蛙跳时间层、正压–斜压模态耦合输运量以及湍动能和混合长度场；破坏蛙跳时间层一致性或水柱体积收支的无约束状态更新会激发计算模态与快速外重力波。第三，位温和盐度是活跃的热力学变量，它们通过非线性 EOS [25] 和静力斜压压强梯度力进入水平动量方程，同时通过湍流闭合中的浮力频率调制垂向粘性与扩散系数 [26]。因此，即便一次示踪物增量在单个时间步上降低了瞬时逐点误差，仍可能引入小尺度密度异常，在后续积分步中产生虚假的斜压压强梯度倾向并扰乱垂向混合。
 
-本文提出建立在三维普林斯顿海洋模式（POM）[BlumbergMellor1987POM] 之上的混合海洋预报系统 NeuralPOM。我们在 PyTorch 中实现了具有两个可微动力框架的 POM——带正压子步循环的显式模态分裂框架（`Explicit`）以及配备隐式微分预条件共轭梯度伴随的半隐式自由面框架（`Implicit`）——并在理想化和近岸基准算例上以双精度 Fortran POM 对二者进行了验证。在逐小时或逐日间隔上，残差 U-Net 预测各活跃地形跟随 $\sigma$ 层上的水平速度、位温和盐度增量。耦合接口通过去除水柱平均速度增量以守恒正压体积输运，去除层平均示踪物增量以在每个 $\sigma$ 层内守恒热量和盐量；随后施加成对 $L_\infty$ 限幅，同步更新当前与历史蛙跳时间层，并由非线性 EOS [MellorYamada1982] 重新计算海水密度，而自由面高度、垂向速度和湍流变量则通过物理求解器演化。基于风生双涡旋海盆 5.4 TB 的细网格参考集合，经由三阶段训练流程——单步预训练（`Pretrain`）、多步可微训练（`Midtrain`）和 10 天闭环滚动训练（`Posttrain`）——训练后，NeuralPOM 在 100 天预报中跨全部预报变量均较粗网格物理参数化方案和直接神经网络预报架构降低了预报误差 [Wu2025TritonV1, Gao2022SimVP, Shi2015ConvLSTM, Wu2023PastNet]。波数谱分析表明，NeuralPOM 维持了物理涡旋动能和近网格变率，同时通过改善中尺度位相对齐度降低了谱误差。最后，通过在 72 小时扰动实验和 100 天闭环积分中将逐层示踪物增量相对于局地 EOS 密度梯度进行正交分解，我们证实**密度法向阻尼**（`DND`）通过衰减改变密度的跨等密面（diapycnal）分量并完整保留等密面密度补偿（isopycnal）水团修正，有效抑制了逐小时耦合下的虚假斜压压强梯度反馈。
+本文提出建立在三维普林斯顿海洋模式（POM）[27, 28] 之上的混合海洋预报系统 NeuralPOM。NeuralPOM 由两个核心部分组成：可微 PyTorch POM 动力框架——涵盖在理想化和近岸基准算例上经双精度 Fortran POM 验证的显式模态分裂（`Explicit`）与半隐式自由面（`Implicit`）格式——以及在保持体积、热量和盐量守恒约束下周期性更新水平速度、位温和盐度的残差 U-Net 校正器。基于风生双涡旋海盆逾 10 万个模式日的细网格参考集合，我们通过包含离线单步预训练、跨物理动力框架的多步可微训练和 10 天闭环滚动训练的三阶段训练流程对 NeuralPOM 进行训练。在 100 天预报中，NeuralPOM 在全部预报变量上均较粗网格物理参数化方案和直接神经网络预报架构降低了预报误差 [29–32]。分阶段训练演进与受控路线消融实验证实了多步可微训练与闭环滚动训练的互补作用：在多步训练期间跨可微动力框架反向传播梯度稳定了逐小时耦合下的温盐与环流演化，而多日闭环滚动训练抑制了逐日和逐小时耦合下的累积轨迹漂移。此外，72 小时扰动诊断实验与 100 天闭环积分揭示，在逐小时耦合下，未经协调的位温与盐度增量会经由非线性 EOS 投影为密度异常并触发虚假的斜压压强梯度反馈；将逐层示踪物增量相对于局地 EOS 密度梯度进行正交分解，并施加**密度法向阻尼**（`DND`）以衰减改变密度的跨等密面（diapycnal）分量、完整保留等密面密度补偿（isopycnal）水团修正，可有效抑制这一不稳定性并持续提升长时效预报技巧。最后，波数谱分析表明，NeuralPOM 维持了物理涡旋动能和近网格变率，同时通过改善中尺度位相对齐度降低了谱误差。
 
 ## 2 NeuralPOM 框架
 
@@ -59,7 +78,7 @@ NeuralPOM 在预报循环中交替执行两项操作：可微三维原始方程�
 
 ### 2.1 可微原始方程动力框架
 
-两个动力框架均在交错 Arakawa-C 水平网格和地形跟随 $\sigma$ 坐标下积分普林斯顿海洋模式（POM）的静力、Boussinesq 原始方程 [BlumbergMellor1987POM]。记水平速度为 $\boldsymbol u_h=(u,v)$、垂向速度为 $w$、物质导数为 $D_t$、科氏参数为 $f$、参考密度为 $\rho_0$、静水压力为 $p$、现场密度为 $\rho$，预报性示踪物为 $C\in\{T,S\}$，连续控制方程为
+两个动力框架均在交错 Arakawa-C 水平网格和地形跟随 $\sigma$ 坐标下积分普林斯顿海洋模式（POM）的静力、Boussinesq 原始方程 [27]。记水平速度为 $\boldsymbol u_h=(u,v)$、垂向速度为 $w$、物质导数为 $D_t$、科氏参数为 $f$、参考密度为 $\rho_0$、静水压力为 $p$、现场密度为 $\rho$，预报性示踪物为 $C\in\{T,S\}$，连续控制方程为
 
 $$
 D_t\boldsymbol u_h+f\boldsymbol e_z\times\boldsymbol u_h=-\rho_0^{-1}\nabla_h p+\mathcal D_m,\qquad \partial_zp=-g\rho,
@@ -71,7 +90,7 @@ $$
 \tag{2.2}
 $$
 
-其中 $\mathcal D_m$ 和 $\mathcal D_C$ 分别表示次网格动量混合与示踪物混合。海水密度 $\rho(T,S,P)$ 由非线性 Mellor 状态方程（EOS）计算，垂向粘性系数 $K_M$ 和扩散系数 $K_H$ 由针对湍动能与混合长度尺度 $(q^2,q^2l)$ 的预报性双方程 Mellor–Yamada 2.5 阶湍流闭合方案给出 [MellorYamada1982]，参考水平耗散遵循谐波 `Smagorinsky` 公式（$A_H = 0.2A_M$）。
+其中 $\mathcal D_m$ 和 $\mathcal D_C$ 分别表示次网格动量混合与示踪物混合。海水密度 $\rho(T,S,P)$ 由非线性 Mellor 状态方程（EOS）计算 [25]，垂向粘性系数 $K_M$ 和扩散系数 $K_H$ 由针对湍动能与混合长度尺度 $(q^2,q^2l)$ 的预报性双方程 Mellor–Yamada 2.5 阶湍流闭合方案给出 [26]，参考水平耗散遵循谐波 `Smagorinsky` 公式（$A_H = 0.2A_M$）。
 
 自由面高度 $\eta$ 依据垂向积分连续方程 $\partial_t\eta+\nabla_h\cdot(H\boldsymbol U)=0$ 演化，其中 $H=h+\eta$ 为水柱总深度，$\boldsymbol U=(U,V)$ 为深度平均水平速度。我们在 PyTorch 中实现了两个可微动力框架，二者在内模态时间步长 $\Delta t = 600\,\mathrm s$ 上共享完全相同的三维斜压、温盐和湍流算子，但在快速外重力波的数值积分方式上有所不同。在显式模态分裂框架（`Explicit`）中，每个内模态步内通过 $N_e=30$ 个蛙跳子步（$\delta t = 20\,\mathrm s$）结合 Robert–Asselin 时间滤波显式子步积分深度积分正压模态，并累加区间平均自由面高度和网格面输运量以维持与三维斜压模态的体积一致性。
 
@@ -127,13 +146,13 @@ $$
 
 我们在一个封闭的风生双涡旋海盆（`double-gyre`）中评估 NeuralPOM：海盆跨越 $30^\circ\mathrm N$ 至 $50^\circ\mathrm N$，内部湿海域宽 2500 km，平底水深 2000 m，含 15 个活跃地形跟随 $\sigma$ 层（共 16 个垂向存储层；图7与附录D）。定常正弦纬向风应力驱动副热带与副极地双涡旋对，二者由不稳定的东向急流和活跃的中尺度涡旋场分隔。位温由指数型垂向层结廓线初始化，盐度由常数 35（模式单位）初始化，海表热通量与淡水通量均为零。由于盐度不受任何外部强迫或边界恢复项作用，细网格参考盐度场中的微弱变率（标准差约 $0.08$）完全源自沿 $\sigma$ 面的有限体积平流与垂向湍流混合；因此，预报过程中引入的任何非物理示踪物源汇或垂向混合扰动都会在盐度场中产生清晰的诊断印记。
 
-对每个动力框架（`Explicit` 与 `Implicit`），我们在 $354\times 322\times 16$ 细网格（水平格距约 $7\,\mathrm{km}$）上从不同的无辐散速度扰动出发，积分了包含 8 个成员、每个成员 9000 个模式日的细网格参考集合。经体积加权守恒限制映射投影到 $90\times 82\times 16$ 粗预报网格（格距约 $28\,\mathrm{km}$，斜压涡旋仅被边缘分辨）后，保存了逐日完整的 45 变量状态检查点以及每天前四小时内每 20 分钟一次的日内目标，两个集合总计 5.4 TB（附录B.1）。集合成员 0–6 的第 1000–7000 天提供训练轨迹，成员 7 的第 7000–8000 天提供验证数据，所有样本外评估均从成员 7 上等间距分布的 16 个预报起报日 $d_r = 8000 + 32r$（$r=0,\dots,15$）初始化并连续积分 100 天。
+对每个动力框架（`Explicit` 与 `Implicit`），我们在 $354\times 322\times 16$ 细网格（水平格距约 $7\,\mathrm{km}$）上从不同的无辐散速度扰动出发，积分了包含 8 个成员、每个成员 9000 个模式日的细网格参考集合，两个集合累计逾 10 万个模式日。经体积加权守恒限制映射投影到 $90\times 82\times 16$ 粗预报网格（格距约 $28\,\mathrm{km}$，斜压涡旋仅被边缘分辨）后，保存了逐日完整的 45 变量状态检查点以及每天前四小时内每 20 分钟一次的日内目标（附录B.1）。集合成员 0–6 的第 1000–7000 天提供训练轨迹，成员 7 的第 7000–8000 天提供验证数据，所有样本外评估均从成员 7 上等间距分布的 16 个预报起报日 $d_r = 8000 + 32r$（$r=0,\dots,15$）初始化并连续积分 100 天。
 
 ### 3.2 基线模型与评估方案
 
 主实验设计将两个动力框架（`Implicit` 与 `Explicit`）、两种耦合间隔（$\Delta=1\,\mathrm{day}$ 与 $\Delta=1\,\mathrm h$）和三个训练阶段（`Pretrain`、`Midtrain` 与 `Posttrain`；优化器日程与更新预算总结于附录B.5表6）交叉组合。粗网格物理与混合积分以 $\Delta t=600\,\mathrm s$ 在 32 位浮点精度下运行，而体积加权均方根误差（RMSE）与径向平均水平速度波数谱则在 64 位精度下累加（附录D.1）。
 
-在未校正的 $90\times 82\times 16$ POM 求解器上，我们对比了三种水平次网格耗散闭合方案（附录D.2）。每个动力框架的主要未校正物理基线采用标准的二阶谐波 `Smagorinsky` 粘性与扩散（$c_m=0.05, c_c=0.01$）。此外，我们还评估了尺度选择性四阶双调和动量耗散 `Biharmonic`（$\gamma=2$）以及动能逆散射闭合 `Backscatter`，后者将双调和耗散与水柱次网格能量储库耦合，通过反粘性谐波强迫将耗散动能的 $\beta=0.5$ 回注至可分辨流动。在这些物理闭合之外，我们训练了五种直接时空神经网络架构——**Triton** [Wu2025TritonV1]、与混合校正器共享残差 U-Net 架构的 **ResUNet**、**SimVP** [Gao2022SimVP]、**ConvLSTM** [Shi2015ConvLSTM] 和 **PastNet** [Wu2023PastNet]——它们不调用数值求解器，直接将 313 通道逐日状态从第 $d$ 天推进至第 $d+1$ 天。每个直接神经网络基线均经过单步预训练（`Pre`）和 10 天闭环滚动训练（`Post`），并在半隐式参考场上从相同的 16 个测试起报日开展 100 天预报评估（附录E）。
+在未校正的 $90\times 82\times 16$ POM 求解器上，我们对比了三种水平次网格耗散闭合方案（附录D.2）。每个动力框架的主要未校正物理基线采用标准的二阶谐波 `Smagorinsky` 粘性与扩散（$c_m=0.05, c_c=0.01$）。此外，我们还评估了尺度选择性四阶双调和动量耗散 `Biharmonic`（$\gamma=2$）以及动能逆散射闭合 `Backscatter`，后者将双调和耗散与水柱次网格能量储库耦合，通过反粘性谐波强迫将耗散动能的 $\beta=0.5$ 回注至可分辨流动。在这些物理闭合之外，我们训练了五种直接时空神经网络架构——**Triton** [29]、与混合校正器共享残差 U-Net 架构的 **ResUNet**、**SimVP** [30]、**ConvLSTM** [31] 和 **PastNet** [32]——它们不调用数值求解器，直接将 313 通道逐日状态从第 $d$ 天推进至第 $d+1$ 天。每个直接神经网络基线均经过单步预训练（`Pre`）和 10 天闭环滚动训练（`Post`），并在半隐式参考场上从相同的 16 个测试起报日开展 100 天预报评估（附录E）。
 
 所有 NeuralPOM 网络在训练时均取式 (2.4) 中的 $c=1$，并在推理阶段使用冻结网络权重在三种示踪物更新规则下评估：未经调整的零收支更新（`Undamped`，$c=1$）、**密度法向阻尼**（`DND`，$c=3/4$），以及作为各向同性对照的**均匀缩放**（`Uniform`），后者将整个受约束示踪物增量 $z$ 乘以在开发状态上标定的固定标量因子 $\kappa\in[0.904,0.931]$，以匹配各配置中 `DND` 的平均体积加权标准化示踪物增量范数（附录C.2）。为了将 `Midtrain` 期间跨可微动力框架反向传播梯度的贡献与多步轨迹暴露及 `Posttrain` 期间闭环滚动训练的贡献分离开来，我们在全部 16 个测试起报日及 `Undamped` 和 `DND` 两种规则下对比了三条训练路线（附录B.5）：完整三阶段训练流程（`Full`，$\mathrm{Pre\to Mid\to Post}$）、跳过中间阶段的消融路线（`Skip`，$\mathrm{Pre\to Post}$），以及截断物理梯度的对照路线（`Detached`，$\mathrm{Pre\to Mid_{detached}\to Post}$），后者执行与 `Full` 完全相同的 4 步 `Midtrain` 前向轨迹与优化器更新预算，但在每个物理积分区间 $\mathcal P^\Delta$ 入口处截断海洋状态梯度。最后，为诊断单次示踪物更新在无后续神经干预时如何经由原始方程传播，我们从全部四个 `Posttrain` 配置在起报日 8000、8160 和 8320 的第 1、10 和 30 天采样 36 个校正前状态。在 $t=0$ 时刻，施加完全相同的斜压速度更新，将单次示踪物更新分为 `no-TS`（省略示踪物增量）、`Undamped`、`Uniform` 和 `DND` 四个分支，并仅使用未校正的物理框架向前积分 72 小时。
 
@@ -143,7 +162,7 @@ $$
 
 在从 16 个样本外测试起报日初始化的 100 天预报中，NeuralPOM 在半隐式（`Implicit`）与显式模态分裂（`Explicit`）两个动力框架上均较未校正粗网格 `Smagorinsky` 基线提升了全状态预报技巧（表1和图2）。在逐日耦合（$\Delta=1\,\mathrm{day}$）下，`DND` 与 `Undamped` 两种部署均降低了全部五个预报变量的 100 天均方根误差（RMSE），将水平速度和海表高度（SSH）误差降低 $5\%\text{–}10\%$、位温误差降低 $10\%\text{–}12\%$、盐度误差降低 $15\%\text{–}18\%$，并将诊断状态方程（EOS）密度误差降低 $8\%\text{–}11\%$（图2b）。即便神经校正器不直接修改 $\eta$，SSH 误差仍下降了 $6\%\text{–}9\%$，这是因为对斜压速度切变和内部浮力层结的更新在随后的物理积分期间通过正压–斜压模态耦合调整了海表面。
 
-**表1 | 相对于粗网格 `Smagorinsky` 基线的 100 天全状态预报技巧。** 16 个测试起报日汇总的 100 天 RMSE 相对于同动力框架（`Implicit` 或 `Explicit`）未校正 `Smagorinsky` 物理框架的百分比变化；负值表示误差降低。混合模式行给出最终 `Posttrain` 检查点在密度法向阻尼（`DND`，$c=3/4$）与无阻尼示踪物更新（`Undamped`，$c=1$）下的结果。海水密度 $\rho$ 由非线性 POM 状态方程诊断计算。
+**表1 | 相对于粗网格 `Smagorinsky` 基线的 100 天全状态预报技巧。** 16 个测试起报日汇总的 100 天 RMSE 相对于同动力框架（`Implicit` 或 `Explicit`）未校正 `Smagorinsky` 物理模型的百分比变化；负值表示误差降低。混合模式行给出最终 `Posttrain` 检查点在密度法向阻尼（`DND`，$c=3/4$）与无阻尼示踪物更新（`Undamped`，$c=1$）下的结果。海水密度 $\rho$ 由非线性 POM 状态方程诊断计算。
 
 | 动力框架 | 配置 | 间隔 | $u$ | $v$ | SSH | $T$ | $S$ | $\rho$ (EOS) |
 |---|---|---|---:|---:|---:|---:|---:|---:|
@@ -162,7 +181,7 @@ $$
 
 ![图2](figures/forecast_skill.png)
 
-**图2 | 不同训练阶段与校正间隔下的预报技巧。** **a**，以 `DND` 部署的全部 12 种混合配置 100 天 RMSE 相对于 `Smagorinsky` 物理框架的百分比变化。**b**，对应的 100 天 EOS 密度 RMSE 百分比变化。负值表示优于 `Smagorinsky`；图中标注取整至整数百分比。Imp 与 Exp 分别表示半隐式框架与显式框架。
+**图2 | 不同训练阶段与校正间隔下的预报技巧。** **a**，以 `DND` 部署的全部 12 种混合配置 100 天 RMSE 相对于 `Smagorinsky` 物理基线的百分比变化。**b**，对应的 100 天 EOS 密度 RMSE 百分比变化。负值表示优于 `Smagorinsky`；图中标注取整至整数百分比。Imp 与 Exp 分别表示半隐式框架与显式框架。
 
 对比逐日与逐时耦合展示了高频环流引导与对示踪物更新的斜压敏感性之间的权衡。当以 `DND` 部署时，逐时耦合（$\Delta=1\,\mathrm h$）在两个动力框架中均产生了最大的环流与海平面误差降幅，将 100 天水平速度 RMSE 降低 $7\%\text{–}10\%$、SSH 误差降低 $12\%\text{–}13\%$，同时位温误差降低 $8\%\text{–}9\%$、密度误差降低 $6\%\text{–}7\%$。然而，若不施加方向性阻尼（`Undamped`），逐时示踪物更新会使无强迫盐度场相对于 `Smagorinsky` 退化 $59\%\text{–}91\%$，并使位温和密度误差上升 $3\%\text{–}5\%$；如第5节所示，`DND` 通过衰减示踪物增量中改变密度的分量防止了这一退化。在未校正粗网格上，用尺度选择性双调和粘性 `Biharmonic` 或动能逆散射 `Backscatter` 替换谐波 `Smagorinsky` 扩散，会使两个动力框架中全部变量的 100 天 RMSE 上升 $4\%\text{–}17\%$（表1），因为在缺乏数据驱动位相校正的情况下激发边缘分辨的涡旋会增大相对于参考轨迹的双重惩罚（double-penalty）误差。
 
@@ -221,7 +240,7 @@ $$
 | ConvLSTM Post (direct AI) | 1 天 | 0.600 | 0.160 | 1.352 | $+0.041$ | $+0.129$ | 0.191 |
 | PastNet Post (direct AI) | 1 天 | 0.741 | 0.185 | 1.421 | $+0.181$ | $+0.059$ | 0.294 |
 
-在全部四种混合配置中，NeuralPOM（`DND`）保持了粗网格物理框架的总体涡旋动能（$R\approx 0.50\text{–}0.60$，对比 `Smagorinsky` 的 $0.53\text{–}0.56$），同时将全谱位相对齐度 $A$ 从 $0.22\text{–}0.25$ 提升至 $0.29\text{–}0.39$，使后期时间窗的 $Q$ 降至 $1.01\text{–}1.14$（表3和图3）。表3中的加性分解表明，$Q$ 值的降低完全源于中尺度位相对齐度的改善（$\Delta Q_{\mathrm{align}} = -0.11\text{ 至 }-0.22$）。式 (4.1) 同时解释了为何直接神经模型在丢失小尺度物理结构的情况下仍能取得较低的近网格 MSE：当高波数处的位相对齐度趋于零（$A\simeq 0$）时，$Q\simeq 1+R$，因此衰减近网格方差（$R\to 0$）会使近网格 $Q$ 趋近于 1 [Leith1974MonteCarlo]。在由中尺度能量主导的全波数谱上，逐日与逐时 NeuralPOM 均取得了低于所有物理闭合方案与直接神经模型的谱误差 $Q$，且逐时耦合完整保持了近网格动能（$R_{\mathrm{near\text{-}grid}}\approx 1.03\text{–}1.13$）。最后，将三维示踪物 MSE 分解为区域平均、垂向廓线和水平锋面分量（式(D.3)；图6与附录D.3）表明，水平涡旋和锋面结构占 100 天位温 MSE 的 $99.6\%$ 以上；而在无强迫盐度场中，水平结构误差占总 MSE 的 $76\%\text{–}79\%$，其余为垂向廓线漂移（$11\%\text{–}18\%$）和区域平均漂移（$6\%\text{–}11\%$）。
+在全部四种混合配置中，NeuralPOM（`DND`）保持了粗网格物理框架的总体涡旋动能（$R\approx 0.50\text{–}0.60$，对比 `Smagorinsky` 的 $0.53\text{–}0.56$），同时将全谱位相对齐度 $A$ 从 $0.22\text{–}0.25$ 提升至 $0.29\text{–}0.39$，使后期时间窗的 $Q$ 降至 $1.01\text{–}1.14$（表3和图3）。表3中的加性分解表明，$Q$ 值的降低源于中尺度位相对齐度的改善（$\Delta Q_{\mathrm{align}} = -0.11\text{ 至 }-0.22$）。式 (4.1) 同时解释了为何直接神经模型在丢失小尺度物理结构的情况下仍能取得较低的近网格 MSE：当高波数处的位相对齐度趋于零（$A\simeq 0$）时，$Q\simeq 1+R$，因此衰减近网格方差（$R\to 0$）会使近网格 $Q$ 趋近于 1 [9, 10]。在由中尺度能量主导的全波数谱上，逐日与逐时 NeuralPOM 均取得了低于所有物理闭合方案与直接神经模型的谱误差 $Q$，且逐时耦合完整保持了近网格动能（$R_{\mathrm{near\text{-}grid}}\approx 1.03\text{–}1.13$）。最后，将三维示踪物 MSE 分解为区域平均、垂向廓线和水平锋面分量（式(D.3)；图6与附录D.3）表明，水平涡旋和锋面结构占 100 天位温 MSE 的 $99.6\%$ 以上；而在无强迫盐度场中，水平结构误差占总 MSE 的 $76\%\text{–}79\%$，其余为垂向廓线漂移（$11\%\text{–}18\%$）和区域平均漂移（$6\%\text{–}11\%$）。
 
 ![图3](figures/velocity_spectra.png)
 
@@ -229,9 +248,9 @@ $$
 
 ### 4.4 分阶段训练的贡献与受控路线消融
 
-对比三个训练阶段（`Pretrain` $\to$ `Midtrain` $\to$ `Posttrain`）的检查点，并在相同更新预算下对比三条受控训练路线（`Full`、`Skip` 与 `Detached`），阐明了多步可微训练和闭环滚动训练如何同耦合间隔及自由面求解器相互作用（表4；附录B.5）。
+对比三个训练阶段（$\mathrm{Pretrain}\to\mathrm{Midtrain}\to\mathrm{Posttrain}$）的检查点，并在相同更新预算下对比三条受控训练路线（`Full`、`Skip` 与 `Detached`），阐明了多步可微训练和闭环滚动训练如何同耦合间隔及自由面求解器相互作用（表4；附录B.5）。
 
-**表4 | `DND` 部署下分阶段训练演进与受控路线消融。** 对以 `DND`（$c=3/4$）部署的各动力框架与耦合间隔，`Mid/Pre` 与 `Post/Mid` 给出相邻阶段之间 100 天汇总 RMSE 的百分比变化（负值表示后一阶段误差降低）。`Full vs. Skip` 与 `Full vs. Detached` 分别给出在相同更新预算下完整三阶段流程（$\mathrm{Pre\to Mid\to Post}$）相对于跳过 `Midtrain`（$\mathrm{Pre\to Post}$）以及相对于截断物理梯度 `Midtrain`（$\mathrm{Pre\to Mid_{detached}\to Post}$）的 100 天 RMSE 相对降幅 $100\%\times(1-E_{\mathrm{Full}}/E_{\mathrm{Skip}})$ 与 $100\%\times(1-E_{\mathrm{Full}}/E_{\mathrm{Detached}})$（正值表示 `Full` 更优）。
+**表4 | `DND` 部署下分阶段训练演进与受控路线消融。** 对以 `DND`（$c=3/4$）部署的各配置，`Mid/Pre` 与 `Post/Mid` 给出相邻阶段之间 100 天 RMSE 的百分比变化（负值表示后一阶段误差降低）。`Full vs. Skip` 与 `Full vs. Detached` 分别给出在相同更新预算下完整三阶段路线（$\mathrm{Pre\to Mid\to Post}$）相对于跳过 `Midtrain`（$\mathrm{Pre\to Post}$）以及相对于截断物理梯度 `Midtrain`（$\mathrm{Pre\to Mid_{detached}\to Post}$）的 100 天 RMSE 相对降幅 $100\%\times(1-E_{\mathrm{Full}}/E_{\mathrm{control}})$（正值表示 `Full` 更优）。
 
 | 动力框架 | 间隔 | 对比项 | $u$ | $v$ | SSH | $T$ | $S$ |
 |---|---|---|---:|---:|---:|---:|---:|
@@ -254,7 +273,7 @@ $$
 
 各训练阶段之间的演进反映了 `Midtrain` 窗口相对于局地惯性周期 $2\pi/f\approx 19\,\mathrm h$ 的时间尺度关系。在逐日耦合下，每个耦合步均长于惯性周期，4 天可微 `Midtrain` 与随后的 10 天闭环 `Posttrain` 在两个动力框架上逐步降低 100 天 RMSE，在 `DND` 下带来 $2\%\text{–}8\%$ 的累积 `Post/Pre` 误差降幅。在逐时耦合下，4 小时 `Midtrain` 窗口不足四分之一个惯性周期：跨四个逐小时步优化使 100 天盐度 RMSE 降低了 $4\%\text{–}16\%$，但抬升了中尺度动能（第 51–100 天的 $R$ 从 $0.73$ 升至 $1.08\text{–}1.09$），从而暂时推高了速度、SSH 和位温的 RMSE。随后每条滚动轨迹跨越 240 个逐小时循环的 10 天闭环 `Posttrain` 将这一过剩动能压回至 $R\approx 0.50\text{–}0.60$，将位相对齐度 $A$ 提升至 $0.34\text{–}0.39$，并将全部五个预报变量的 100 天 RMSE 相对于 `Midtrain` 降低了 $17\%\text{–}33\%$。
 
-三路线受控消融（`Full`、`Skip` 与 `Detached`）将多步前向滚动轨迹暴露的作用同 `Midtrain` 期间跨可微物理框架反向传播梯度的作用分离开来（表4）。在逐日耦合下，由于每个 24 小时积分步已跨越完整的惯性调整周期，10 天闭环 `Posttrain` 主导了长时效技巧，三条路线在 100 天 RMSE 上的差异不超过 $1.1\%$，在速度谱误差 $Q$ 上的差异不超过 $1.0\%$。而在逐时耦合下，跨物理积分步反向传播梯度起到了决定性作用。在每个斜压步通过 30 个正压子步跨越逐小时间隔传播快速外重力波的显式模态分裂框架中，仅在截断物理梯度的 4 步滚动轨迹上训练（`Detached`）相对于 `Skip` 仅带来 $3.9\%$ 的盐度改善，同时在速度、SSH 和位温上略微退化（$-0.4\%$ 至 $-2.3\%$）。保留跨物理梯度（`Full` 对比 `Detached`）则在全部五个预报场上全面降低 100 天 RMSE——水平速度与 SSH 降低约 $5\%$，位温降低 $9\%$（`Undamped` 下降低 $12\%$），盐度降低 $39\%$（`Undamped` 下降低 $32\%$）——贡献了 `Full` 相对于 `Skip` 盐度总 MSE 降幅的 $88\%\text{–}89\%$，并将全谱速度误差能量 $Q$ 降低 $10\%$（其中近网格速度谱误差降低 $14\%\text{–}19\%$）。在每个 600 s 时间步上通过隐式自由面阻尼滤除快速外重力波的半隐式逐时框架中，截断梯度的 4 步滚动训练使盐度相对于 `Skip` 退化 $6.8\%$，而保留跨物理梯度（`Full` 对比 `Detached`）则将 100 天盐度 RMSE 降低 $10\%\text{–}12\%$、位温 RMSE 降低 $1\%\text{–}2\%$，并伴随水平速度的微幅改善。
+三路线受控消融（`Full`、`Skip` 与 `Detached`）将多步前向滚动轨迹暴露的作用同 `Midtrain` 期间跨可微物理框架反向传播梯度的作用分离开来（表4）。在逐日耦合下，由于每个 24 小时积分步已跨越完整的惯性调整周期，10 天闭环 `Posttrain` 主导了长时效技巧，三条路线在 100 天 RMSE 上的差异不超过 $1.1\%$，在速度谱误差 $Q$ 上的差异不超过 $1.0\%$。而在逐时耦合下，跨物理积分步反向传播梯度起到了决定性作用。在每个斜压步通过 30 个正压子步传播快速外重力波的显式模态分裂框架中，仅在截断物理梯度的 4 步滚动轨迹上训练（`Detached`）相对于 `Skip` 仅带来 $3.9\%$ 的盐度改善，同时在速度、SSH 和位温上略微退化（$-0.4\%$ 至 $-2.3\%$）。保留跨物理梯度（`Full` 对比 `Detached`）则在全部五个预报场上全面降低 100 天 RMSE——水平速度与 SSH 降低约 $5\%$，位温降低 $9\%$（`Undamped` 下降低 $12\%$），盐度降低 $39\%$（`Undamped` 下降低 $32\%$）——贡献了 `Full` 相对于 `Skip` 盐度总 MSE 降幅的 $88\%\text{–}89\%$，并将全谱速度误差能量 $Q$ 降低 $10\%$（其中近网格速度谱误差 $Q$ 降低 $14\%\text{–}19\%$）。在每个 600 s 时间步上通过隐式自由面阻尼滤除快速外重力波的半隐式逐时框架中，截断梯度的 4 步滚动训练使盐度相对于 `Skip` 退化 $6.8\%$，而保留跨物理梯度（`Full` 对比 `Detached`）则将 100 天盐度 RMSE 降低 $10\%\text{–}12\%$、位温 RMSE 降低 $1\%\text{–}2\%$。
 
 ## 5 示踪物校正的斜压反馈与密度法向阻尼
 
@@ -278,7 +297,7 @@ z_c=(I-E)z+cEz .
 \tag{5.2}
 $$
 
-当取 $c=3/4$ 时，`DND` 将改变密度投影的平方范数降低 $1-(3/4)^2=43.75\%$，同时 $100\%$ 保留密度补偿的水团修正，并维持逐层热量和盐量守恒（附录C）。
+当取 $c=3/4$ 时，`DND` 将改变密度投影的平方范数降低 $1-(3/4)^2=43.75\%$，同时 $100\%$ 保留密度补偿的水团修正，并维持精确的逐层热量和盐量守恒（附录C）。
 
 ### 5.2 72 小时单次扰动传播实验
 
@@ -317,9 +336,9 @@ $$
 
 NeuralPOM 表明，三维地形跟随原始方程海洋环流模式与神经状态校正器可以耦合训练，并在 100 天积分上同时优于粗网格次网格闭合方案和直接自回归神经网络预报模型。在涡旋允许的粗网格上，传统次网格参数化仅凭可分辨应变率无法恢复未分辨中尺度涡的空间位相，而无约束的直接神经预报器在延伸期滚动中会衰减小尺度变率并累积体积与示踪物守恒误差。通过保留显式模态分裂和半隐式原始方程框架以维持体积连续性、静力与地转平衡以及垂向湍流混合，并定期施加受约束的斜压速度和逐层示踪物更新，NeuralPOM 在维持真实中尺度动能的同时降低了水平速度、海表高度、位温、盐度和现场密度的预报误差。稳定的长时效性能同时依赖于受守恒约束的状态更新——包括水柱平均切变投影、层积分热量与盐量守恒、当前与历史时间层的蛙跳一致更新以及即时状态方程密度计算——和三阶段训练流程。特别地，受控训练路线消融证实，在以逐小时间隔耦合显式模态分裂框架时，是在 4 步 `Midtrain` 期间跨可微动力框架反向传播梯度——而非仅在截断梯度下将网络暴露于多步滚动状态——驱动了长时效温盐与环流预报的改善。
 
-诊断扰动实验和闭环实验阐明了高频耦合下温盐状态更新与原始方程动力学的相互作用机制。由于位温和盐度通过非线性状态方程 $\rho(T,S,P)$ 强迫水平动量与垂向湍流，将每个逐层示踪物增量相对于局地 EOS 密度梯度进行正交分解，可将一阶近似下保持浮力层结不变并在平流–扩散下衰减的等密面密度补偿（isopycnal）分量，同改变静力斜压压强梯度与垂向浮力层结且保持层均值守恒的跨等密面改变密度（diapycnal）分量分离开来。当以逐小时间隔——远快于地转调整所需的约 $19\,\mathrm h$ 局地惯性周期——施加校正时，位温和盐度中未经协调的残差会投影到改变密度的分量上，激发近网格非地转速度方差并扰乱 Mellor–Yamada 垂向混合。密度法向阻尼（`DND`）通过将改变密度分量的平方范数衰减 $43.75\%$ 同时完整保留密度补偿的水团修正，有效缓解了这一反馈，在逐时预报中取得了比范数匹配各向同性均匀缩放大 4 至 8 倍的 100 天误差降幅。从物理海洋学角度看，`DND` 通过限制高频状态更新期间的不平衡斜压强迫，发挥着类似于业务化海洋资料同化中增量分析更新（IAU）[Bloom1996IAU] 与切线性平衡约束的作用。
+诊断扰动实验和闭环实验阐明了高频耦合下温盐状态更新与原始方程动力学的相互作用机制。由于位温和盐度通过非线性状态方程 $\rho(T,S,P)$ 强迫水平动量与垂向湍流，将每个逐层示踪物增量相对于局地 EOS 密度梯度进行正交分解，可将一阶近似下保持浮力层结不变并在平流–扩散下衰减的等密面密度补偿（isopycnal）分量，同改变静力斜压压强梯度与垂向浮力层结且保持层均值守恒的跨等密面改变密度（diapycnal）分量分离开来。当以逐小时间隔——远快于地转调整所需的约 $19\,\mathrm h$ 局地惯性周期——施加校正时，位温和盐度中未经协调的残差会投影到改变密度的分量上，激发近网格非地转速度方差并扰乱 Mellor–Yamada 垂向混合。密度法向阻尼（`DND`）通过将改变密度分量的平方范数衰减 $43.75\%$ 同时完整保留密度补偿的水团修正，有效缓解了这一反馈，在逐时预报中取得了比范数匹配各向同性均匀缩放大 4 至 8 倍的 100 天误差降幅。从物理海洋学角度看，`DND` 通过限制高频状态更新期间的不平衡斜压强迫，发挥着类似于业务化海洋资料同化中增量分析更新（IAU）[33] 与切线性平衡约束的作用。
 
-上述结果可自然延伸至两个研究方向。第一，由于粗网格仅分辨约 $55\%\text{–}60\%$ 的细网格涡旋动能，且确定性 MSE 目标对位相失准的涡旋施加双重惩罚 [Leith1974MonteCarlo]，NeuralPOM 主要通过改善中尺度位相对齐度而非放大涡旋振幅来降低速度谱误差；将流场依赖的跨等密面阻尼因子 $c(x)$ 与概率集合目标或尺度感知谱损失相结合，为协同提升涡旋振幅与位相提供了可行途径。第二，本文的预报实验是在零海表浮力通量且具备完整细网格参考状态的理想化封闭双涡旋海盆中开展的；本文发展的可微 PyTorch POM 动力框架、受守恒约束耦合接口、三阶段训练流程和密度法向分解可直接迁移至基于高分辨率海洋再分析或观测训练的真实区域及全球原始方程海洋预报系统。
+上述结果可自然延伸至两个研究方向。第一，由于粗网格仅分辨约 $55\%\text{–}60\%$ 的细网格涡旋动能，且确定性 MSE 目标对位相失准的涡旋施加双重惩罚 [9, 10]，NeuralPOM 主要通过改善中尺度位相对齐度而非放大涡旋振幅来降低速度谱误差；将流场依赖的跨等密面阻尼因子 $c(x)$ 与概率集合目标或尺度感知谱损失相结合，为协同提升涡旋振幅与位相提供了可行途径。第二，本文的预报实验是在零海表浮力通量且具备完整细网格参考状态的理想化封闭双涡旋海盆中开展的；本文发展的可微 PyTorch POM 动力框架、受守恒约束耦合接口、三阶段训练流程和密度法向分解可直接迁移至基于高分辨率海洋再分析或观测训练的真实区域及全球原始方程海洋预报系统。
 
 ## 致谢
 
@@ -329,9 +348,49 @@ NeuralPOM 表明，三维地形跟随原始方程海洋环流模式与神经状�
 
 NeuralPOM 源代码可从 [GitHub](https://github.com/ChiyodaMomo01/NeuralPOM) 获取，数据集可从 [ModelScope](https://www.modelscope.cn/datasets/chiyodamomo01/NeuralPOM) 获取。
 
+## 参考文献
+
+1. Baylor Fox-Kemper, Alistair Adcroft, Claus W. Böning, Eric P. Chassignet, Enrique Curchitser, Gokhan Danabasoglu, Carsten Eden, Matthew H. England, Rüdiger Gerdes, Richard J. Greatbatch, Stephen M. Griffies, Robert W. Hallberg, Emmanuel Hanert, Patrick Heimbach, Helene T. Hewitt, Christopher N. Hill, Yoshiki Komuro, Sonya Legg, Julien Le Sommer, Simona Masina, Simon J. Marsland, Stephen G. Penny, Fangli Qiao, Todd D. Ringler, Anne Marie Treguier, Hiroyuki Tsujino, Petteri Uotila, and Stephen G. Yeager. Challenges and Prospects in Ocean Circulation Models. *Frontiers in Marine Science*, 6:65, 2019. doi:10.3389/fmars.2019.00065.
+2. Patrick Heimbach, Fearghal O'Donncha, Timothy A. Smith, Jose Maria Garcia-Valdecasas, Alain Arnaud, and Liying Wan. Crafting the future: Machine learning for ocean forecasting. *State of the Planet*, 5-opsr:22, 2025. doi:10.5194/sp-5-opsr-22-2025.
+3. Helene T. Hewitt, Malcolm Roberts, Pierre Mathiot, Arne Biastoch, Ed Blockley, Eric P. Chassignet, Baylor Fox-Kemper, Pat Hyder, David P. Marshall, Ekaterina Popova, Anne-Marie Treguier, Laure Zanna, Andrew Yool, Yongqiang Yu, Rebecca Beadling, Mike Bell, Till Kuhlbrodt, Thomas Arsouze, Alessio Bellucci, Fred Castruccio, Bolan Gan, Dian Putrasahan, Christopher D. Roberts, Luke Van Roekel, and Qiuying Zhang. Resolving and Parameterising the Ocean Mesoscale in Earth System Models. *Current Climate Change Reports*, 6(4):137–152, 2020. doi:10.1007/s40641-020-00164-w.
+4. Yingzhe Cui, Ruohan Wu, Xiang Zhang, Ziqi Zhu, Bo Liu, Jun Shi, Junshi Chen, Hailong Liu, Shenghui Zhou, Liang Su, Zhao Jing, Hong An, and Lixin Wu. Forecasting the eddying ocean with a deep neural network. *Nature Communications*, 16(1):2268, 2025. doi:10.1038/s41467-025-57389-2.
+5. Anass El Aouni, Quentin Gaudel, Charly Regnier, Simon Van Gennip, Olivier Le Galloudec, Marie Drevillon, Yann Drillet, and Jean-Michel Lellouche. GLONET: Mercator's end-to-end neural global ocean forecasting system. *Journal of Geophysical Research: Machine Learning and Computation*, 2(3):e2025JH000686, 2025. doi:10.1029/2025JH000686.
+6. Daniel Holmberg, Emanuela Clementi, Italo Epicoco, and Teemu Roos. Accurate mediterranean sea forecasting via graph-based deep learning. *Scientific Reports*, 15(1):45051, 2025. doi:10.1038/s41598-025-31177-w.
+7. Yuan Niu, Qiusheng Huang, Xiaohui Zhong, Anboyu Guo, Lei Chen, Dianjun Zhang, Zhen-Qiang Zhou, Xiaoyan Jia, Libo Wu, Renhe Zhang, Jiawei Qi, Xuefeng Zhang, and Hao Li. A deep learning global ocean forecasting model with sub-daily and eddy-resolving resolution. *npj Climate and Atmospheric Science*, 9(1):194, 2026. doi:10.1038/s41612-026-01444-2.
+8. Ashesh Chattopadhyay, Michael Gray, Tianning Wu, Anna B. Lowe, and Ruoying He. OceanNet: a principled neural operator-based digital twin for regional oceans. *Scientific Reports*, 14(1):21181, 2024. doi:10.1038/s41598-024-72145-0.
+9. C. E. Leith. Theoretical skill of Monte Carlo forecasts. *Monthly Weather Review*, 102(6):409–418, 1974. doi:10.1175/1520-0493(1974)102<0409:TSOMCF>2.0.CO;2.
+10. Dmitrii Kochkov, Janni Yuval, Ian Langmore, Peter Norgaard, Jamie Smith, Griffin Mooers, Milan Klöwer, James Lottes, Stephan Rasp, Peter Düben, Sam Hatfield, Peter Battaglia, Alvaro Sanchez-Gonzalez, Matthew Willson, Michael P. Brenner, and Stephan Hoyer. Neural general circulation models for weather and climate. *Nature*, 632(8027):1060–1066, 2024. doi:10.1038/s41586-024-07744-y.
+11. Laure Zanna, William Gregory, Pavel Perezhogin, Aakash Sane, Cheng Zhang, Alistair Adcroft, Mitch Bushuk, Carlos Fernandez-Granda, Brandon Reichl, Dhruv Balwada, Julius Busecke, William Chapman, Alex Connolly, Danni Du, Kelsey Everard, Fabrizio Falasca, Renaud Falga, David Kamm, Etienne Meunier, Qi Liu, Antoine Nasser, Matthew Pudig, Andrew Shao, Julia L. Simpson, Linus Vogt, and Jiarong Wu. A framework for hybrid physics-AI coupled ocean models, 2025. URL https://arxiv.org/abs/2510.22676. Preprint; version 1 consulted.
+12. Thomas Bolton and Laure Zanna. Applications of Deep Learning to Ocean Data Inference and Subgrid Parameterization. *Journal of Advances in Modeling Earth Systems*, 11(1):376–399, 2019. doi:10.1029/2018MS001472.
+13. Laure Zanna and Thomas Bolton. Data-Driven Equation Discovery of Ocean Mesoscale Closures. *Geophysical Research Letters*, 47(17):e2020GL088376, 2020. doi:10.1029/2020GL088376.
+14. Arthur P. Guillaumin and Laure Zanna. Stochastic-Deep Learning Parameterization of Ocean Momentum Forcing. *Journal of Advances in Modeling Earth Systems*, 13(9):e2021MS002534, 2021. doi:10.1029/2021MS002534.
+15. Andrew Ross, Ziwei Li, Pavel Perezhogin, Carlos Fernandez-Granda, and Laure Zanna. Benchmarking of Machine Learning Ocean Subgrid Parameterizations in an Idealized Model. *Journal of Advances in Modeling Earth Systems*, 15(1):e2022MS003258, 2023. doi:10.1029/2022MS003258.
+16. Pavel Perezhogin, Cheng Zhang, Alistair Adcroft, Carlos Fernandez-Granda, and Laure Zanna. A Stable Implementation of a Data-Driven Scale-Aware Mesoscale Parameterization. *Journal of Advances in Modeling Earth Systems*, 16(10):e2023MS004104, 2024. doi:10.1029/2023MS004104.
+17. David Kamm, Pavel Perezhogin, Julie Deshayes, Etienne Meunier, and Alexis Barge. Assessing Data-Driven Eddy-Parameterizations in an Atlantic Sector Model. *Journal of Advances in Modeling Earth Systems*, 18(6):e2026MS005816, 2026. doi:10.1029/2026MS005816.
+18. Ruiqi Shu, Hao Wu, Yuan Gao, Fanghua Xu, Ruijian Gou, Wei Xiong, and Xiaomeng Huang. Advanced forecasts of global extreme marine heatwaves through a physics-guided data-driven approach. *Environmental Research Letters*, 20(4):044030, 2025. doi:10.1088/1748-9326/adbddd.
+19. Ruiqi Shu, Ruijian Gou, Yanfei Xiang, and Xiaomeng Huang. Ocean-E2E: Hybrid Physics-Based and Data-Driven Global Forecasting of Marine Heatwaves with End-to-End Neural Assimilation. In *Proceedings of the 32nd ACM SIGKDD Conference on Knowledge Discovery and Data Mining V.2*, pages 12018–12029, 2026a. doi:10.1145/3770855.3818893.
+20. Ruiqi Shu, Xiaohui Zhong, Qiusheng Huang, Ruijian Gou, Tianrun Gao, Hao Li, and Xiaomeng Huang. HybridOM: Hybrid physics-based and data-driven global ocean modeling with efficient spatial downscaling. In *Proceedings of the 43rd International Conference on Machine Learning*, volume 306 of *Proceedings of Machine Learning Research*, pages 112816–112846. PMLR, 2026b. URL https://proceedings.mlr.press/v306/shu26b.html.
+21. Said Ouala, Bertrand Chapron, Fabrice Collard, Lucile Gaultier, and Ronan Fablet. Online calibration of deep learning sub-models for hybrid numerical modeling systems. *Communications Physics*, 7(1):402, 2024. doi:10.1038/s42005-024-01880-7.
+22. Hugo Frezat, Julien Le Sommer, Ronan Fablet, Guillaume Balarac, and Redouane Lguensat. A Posteriori Learning for Quasi-Geostrophic Turbulence Parametrization. *Journal of Advances in Modeling Earth Systems*, 14(11):e2022MS003124, 2022. doi:10.1029/2022MS003124.
+23. Bjoern List, Li-Wei Chen, Kartik Bali, and Nils Thuerey. Differentiability in unrolled training of neural physics simulators on transient dynamics. *Computer Methods in Applied Mechanics and Engineering*, 433:117441, 2025. doi:10.1016/j.cma.2024.117441.
+24. F. E. Yan, H. Frezat, J. Le Sommer, J. Mak, and K. Otness. Adjoint-Based Online Learning of Two-Layer Quasi-Geostrophic Baroclinic Turbulence. *Journal of Advances in Modeling Earth Systems*, 17(7):e2024MS004857, 2025. doi:10.1029/2024MS004857.
+25. George L. Mellor. An Equation of State for Numerical Models of Oceans and Estuaries. *Journal of Atmospheric and Oceanic Technology*, 8(4):609–611, 1991. doi:10.1175/1520-0426(1991)008<0609:AEOSFN>2.0.CO;2.
+26. George L. Mellor and Tetsuji Yamada. Development of a turbulence closure model for geophysical fluid problems. *Reviews of Geophysics*, 20(4):851–875, 1982. doi:10.1029/RG020i004p00851.
+27. Alan F. Blumberg and George L. Mellor. A description of a three-dimensional coastal ocean circulation model. In Norman S. Heaps, editor, *Three-Dimensional Coastal Ocean Models*, volume 4 of *Coastal and Estuarine Sciences*, pages 1–16. American Geophysical Union, 1987. doi:10.1029/CO004p0001.
+28. S. Xu, X. Huang, L.-Y. Oey, F. Xu, H. Fu, Y. Zhang, and G. Yang. POM.gpu-v1.0: a GPU-based Princeton Ocean Model. *Geoscientific Model Development*, 8(9):2815–2827, 2015. doi:10.5194/gmd-8-2815-2015.
+29. Hao Wu, Yuan Gao, Ruiqi Shu, Kun Wang, Ruijian Gou, Chuhan Wu, Xinliang Liu, Juncai He, Shuhao Cao, Junfeng Fang, Xingjian Shi, Feng Tao, Qi Song, Shengxuan Ji, Yanfei Xiang, Yuze Sun, Jiahao Li, Fan Xu, Huanshuo Dong, Haixin Wang, Fan Zhang, Penghao Zhao, Xian Wu, Qingsong Wen, Deliang Chen, and Xiaomeng Huang. Advanced long-term earth system forecasting by learning the small-scale nature, 2025. URL https://arxiv.org/abs/2505.19432v1. Preprint; version 1 consulted, describing the historical Triton architecture.
+30. Zhangyang Gao, Cheng Tan, Lirong Wu, and Stan Z. Li. SimVP: Simpler yet better video prediction. In *Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition*, pages 3170–3180, 2022.
+31. Xingjian Shi, Zhourong Chen, Hao Wang, Dit-Yan Yeung, Wai-kin Wong, and Wang-chun Woo. Convolutional LSTM network: A machine learning approach for precipitation nowcasting. In *Advances in Neural Information Processing Systems*, volume 28, pages 802–810, 2015.
+32. Hao Wu, Fan Xu, Chong Chen, Xian-Sheng Hua, Xiao Luo, and Haixin Wang. PastNet: Introducing physical inductive biases for spatio-temporal video prediction. *arXiv preprint arXiv:2305.11421*, 2023. doi:10.48550/arXiv.2305.11421.
+33. Stephen C. Bloom, Lawrence L. Takacs, Arlindo M. da Silva, and D. Ledvina. Data assimilation using incremental analysis updates. *Monthly Weather Review*, 124(6):1256–1271, 1996. doi:10.1175/1520-0493(1996)124<1256:DAUIAU>2.0.CO;2.
+34. R. Penrose. A generalized inverse for matrices. *Proceedings of the Cambridge Philosophical Society*, 51(3):406–413, 1955. doi:10.1017/S0305004100030401.
+35. Alexander F. Shchepetkin and James C. McWilliams. A method for computing horizontal pressure-gradient force in an oceanic model with a nonaligned vertical coordinate. *Journal of Geophysical Research: Oceans*, 108(C3):3090, 2003. doi:10.1029/2001JC001047.
+
+---
+
 ## 附录A 控制方程与数值离散格式
 
-本附录给出 NeuralPOM 的控制方程与离散算子。两个动力框架均按照普林斯顿海洋模式（POM）[BlumbergMellor1987POM] 在地形跟随坐标下求解静力、Boussinesq 原始方程，区别在于自由面积分方式：`Explicit` 框架通过显式模态分裂子步循环分辨外模态正压过程，而 `Implicit` 框架在内模态斜压时间步上求解半隐式椭圆型自由面方程组。与双精度 Fortran 参考代码的对比验证见附录F。
+本附录给出 NeuralPOM 的控制方程与离散算子。两个动力框架均按照普林斯顿海洋模式（POM）[27] 在地形跟随坐标下求解静力、Boussinesq 原始方程，区别在于自由面积分方式：`Explicit` 框架通过显式模态分裂子步循环分辨外模态正压过程，而 `Implicit` 框架在内模态斜压时间步上求解半隐式椭圆型自由面方程组。与双精度 Fortran 参考代码的对比验证见附录F。
 
 ### A.1 坐标系、变量与时间层
 
@@ -387,7 +446,7 @@ $$
 \tag{A.6}
 $$
 
-垂向动量边界条件规定海表风应力 $(K_M+\nu)\partial_z(u,v)|_{z=\eta}=\boldsymbol\tau_s/\rho_0$ 与二次底摩擦 $(K_M+\nu)\partial_z(u,v)|_{z=-h}=C_D|\boldsymbol u_b|\boldsymbol u_b$。现场密度 $\rho$ 与经验声速 $c$ 由非线性 POM 状态方程 [BlumbergMellor1987POM, MellorYamada1982] 作为位温 $\vartheta=T+T_{\mathrm{bias}}$（${}^\circ\mathrm C$）、盐度 $s=S+S_{\mathrm{bias}}$ 和静态参考压力 $P=-\rho_0g\bar\sigma h\times 10^{-5}$（$\mathrm{bar}$）的函数计算：
+垂向动量边界条件规定海表风应力 $(K_M+\nu)\partial_z(u,v)|_{z=\eta}=\boldsymbol\tau_s/\rho_0$ 与二次底摩擦 $(K_M+\nu)\partial_z(u,v)|_{z=-h}=C_D|\boldsymbol u_b|\boldsymbol u_b$。现场密度 $\rho$ 与经验声速 $c$ 由非线性 POM 状态方程 [25, 27] 作为位温 $\vartheta=T+T_{\mathrm{bias}}$（${}^\circ\mathrm C$）、盐度 $s=S+S_{\mathrm{bias}}$ 和静态参考压力 $P=-\rho_0g\bar\sigma h\times 10^{-5}$（$\mathrm{bar}$）的函数计算：
 
 $$
 \rho=\rho(\vartheta,s,P),\qquad r=\frac{\rho(\vartheta,s,P)-\rho_{\mathrm{off}}}{\rho_0}.
@@ -431,7 +490,7 @@ $$
 
 ### A.5 垂向湍流闭合与隐式水柱扩散
 
-垂向湍流混合由 Mellor–Yamada 2.5 阶闭合方案参数化 [MellorYamada1982]，对两倍湍动能 $q^2$ 与主长度尺度乘积 $q^2l$ 求解预报方程：
+垂向湍流混合由 Mellor–Yamada 2.5 阶闭合方案参数化 [26]，对两倍湍动能 $q^2$ 与主长度尺度乘积 $q^2l$ 求解预报方程：
 
 $$
 \mathscr C(q^2)=\nabla_h\cdot(HA_M\nabla_hq^2)+\partial_\sigma\!\Bigl[\frac{K_Q+\nu}{H}\partial_\sigma q^2\Bigr]+2H\Bigl(P_s+B-\frac{q^3}{B_1l}\Bigr),
@@ -608,7 +667,7 @@ $$
 \tag{C.1}
 $$
 
-在 $\|\cdot\|_w$ 范数下求 $\mathcal S$ 中距离 $z$ 最近的元素 $p$，归结为在约束 $\sum_iw_in_i\beta_i=0$ 下极小化 $\tfrac12\sum_iw_i(\beta_i-a_i)^2$。引入拉格朗日乘子 $\lambda\in\mathbb R^2$，驻点条件给出 $\beta_i=a_i-n_i^\top\lambda$ 与 $M\lambda=b$，其中 $M=\sum_iw_in_in_i^\top\in\mathbb R^{2\times2}$ 为层密度法向的对称半正定 Gram 矩阵，$b=\sum_iw_in_ia_i\in\mathbb R^2$。由于任意 $t\in\ker M$ 满足 $0=t^\top Mt=\sum_iw_i(n_i^\top t)^2$，从而对所有 $i$ 有 $n_i^\top t=0$，故 $t^\top b=0$，即 $b\in\operatorname{ran}M$。应用 Moore–Penrose 伪逆 $M^+$ [Penrose1955GeneralizedInverse] 可得唯一的最小范数乘子 $\lambda=M^+b$ 以及投影标量幅度
+在 $\|\cdot\|_w$ 范数下求 $\mathcal S$ 中距离 $z$ 最近的元素 $p$，归结为在约束 $\sum_iw_in_i\beta_i=0$ 下极小化 $\tfrac12\sum_iw_i(\beta_i-a_i)^2$。引入拉格朗日乘子 $\lambda\in\mathbb R^2$，驻点条件给出 $\beta_i=a_i-n_i^\top\lambda$ 与 $M\lambda=b$，其中 $M=\sum_iw_in_in_i^\top\in\mathbb R^{2\times2}$ 为层密度法向的对称半正定 Gram 矩阵，$b=\sum_iw_in_ia_i\in\mathbb R^2$。由于任意 $t\in\ker M$ 满足 $0=t^\top Mt=\sum_iw_i(n_i^\top t)^2$，从而对所有 $i$ 有 $n_i^\top t=0$，故 $t^\top b=0$，即 $b\in\operatorname{ran}M$。应用 Moore–Penrose 伪逆 $M^+$ [34] 可得唯一的最小范数乘子 $\lambda=M^+b$ 以及投影标量幅度
 
 $$
 \beta_i=a_i-n_i^\top M^+b,\qquad \sum_iw_ip_i=b-MM^+b=0.
@@ -684,7 +743,7 @@ $$
 
 ### D.4 水平速度波数谱
 
-每个水平速度分量均在其原生的交错 C 网格上分析。在每个活跃层 $k$ 内，先对速度场施加掩膜，乘以二维 Hann 窗 $q_{ij}$，使用相同窗权重去除均值，除以 $\bigl[(N_xN_y)^{-1}\sum_{ij} q_{ij}^2\bigr]^{1/2}$ 归一化，再经前向归一化二维快速傅里叶变换（FFT）转换至波数空间。各向同性径向波数分箱覆盖 $0$ 至 $\sqrt{1/2}$ 周/网格间距（cpg）。层动能 $E_{kb}=\tfrac12\sum_{\mathcal B_b}(|\hat u_k|^2+|\hat v_k|^2)$ 按层厚 $\Delta\sigma_k$ 加权。预测、参考、误差和交叉谱动能 $E^p,E^r,E^e,C$ 先在每个预报时间窗内的 16 个评估起报日和各提前期上取平均，再构造能量比 $R=E^p/E^r$、归一化谱误差 $Q=E^e/E^r$ 和位相对齐度 $A=C/\sqrt{E^pE^r}$，三者满足精确恒等式 $Q=R+1-2A\sqrt R$ [Leith1974MonteCarlo]。波段划分为大尺度（$k\le0.125$ cpg）、中间尺度（$0.125<k\le0.25$）、近网格尺度（$0.25<k\le0.5$）和角波数带（$k>0.5$）。
+每个水平速度分量均在其原生的交错 C 网格上分析。在每个活跃层 $k$ 内，先对速度场施加掩膜，乘以二维 Hann 窗 $q_{ij}$，使用相同窗权重去除均值，除以 $\bigl[(N_xN_y)^{-1}\sum_{ij} q_{ij}^2\bigr]^{1/2}$ 归一化，再经前向归一化二维快速傅里叶变换（FFT）转换至波数空间。各向同性径向波数分箱覆盖 $0$ 至 $\sqrt{1/2}$ 周/网格间距（cpg）。层动能 $E_{kb}=\tfrac12\sum_{\mathcal B_b}(|\hat u_k|^2+|\hat v_k|^2)$ 按层厚 $\Delta\sigma_k$ 加权。预测、参考、误差和交叉谱动能 $E^p,E^r,E^e,C$ 先在每个预报时间窗内的 16 个评估起报日和各提前期上取平均，再构造能量比 $R=E^p/E^r$、归一化谱误差 $Q=E^e/E^r$ 和位相对齐度 $A=C/\sqrt{E^pE^r}$，三者满足精确恒等式 $Q=R+1-2A\sqrt R$。波段划分为大尺度（$k\le0.125$ cpg）、中间尺度（$0.125<k\le0.25$）、近网格尺度（$0.25<k\le0.5$）和角波数带（$k>0.5$）。
 
 ### D.5 充分发展的双涡旋海盆环流
 
@@ -707,10 +766,10 @@ $$
 我们评估了五种时空神经网络架构（括号内注明按验证集选取的 `Pretrain` 步数与最终完成的 `Posttrain` 优化器步数）：
 
 - **ResUNet**（`Pretrain`：8,750；`Posttrain`：11,440）：将混合校正器的残差 U-Net 架构加宽为 313 个输入通道和 313 个输出通道。
-- **Triton**（`Pretrain`：22,750；`Posttrain`：17,327）：文献 [Wu2025TritonV1] 的多尺度时空层次架构，空间隐藏宽度设为 256，时间隐藏宽度设为 512，含 4 个空间块和 8 个时间块。
-- **SimVP**（`Pretrain`：25,375；`Posttrain`：7,920）：文献 [Gao2022SimVP] 基于 Inception 的时空转换器，空间宽度为 256，时间宽度为 512。
-- **ConvLSTM**（`Pretrain`：34,125；`Posttrain`：17,600）：双层卷积 LSTM 网络 [Shi2015ConvLSTM]，每层含 256 个隐藏通道，卷积核为 $3\times3$。
-- **PastNet**（`Pretrain`：9,625；`Posttrain`：9,680）：文献 [Wu2023PastNet] 结合谱卷积与离散向量量化码本的混合架构，码本含 512 个条目。
+- **Triton**（`Pretrain`：22,750；`Posttrain`：17,327）：文献 [29] 的多尺度时空层次架构，空间隐藏宽度设为 256，时间隐藏宽度设为 512，含 4 个空间块和 8 个时间块。
+- **SimVP**（`Pretrain`：25,375；`Posttrain`：7,920）：文献 [30] 基于 Inception 的时空转换器，空间宽度为 256，时间宽度为 512。
+- **ConvLSTM**（`Pretrain`：34,125；`Posttrain`：17,600）：双层卷积 LSTM 网络 [31]，每层含 256 个隐藏通道，卷积核为 $3\times3$。
+- **PastNet**（`Pretrain`：9,625；`Posttrain`：9,680）：文献 [32] 结合谱卷积与离散向量量化码本的混合架构，码本含 512 个条目。
 
 水平网格在每次前向传播前填充至 $92\times84$（Triton、SimVP）或 $96\times96$（PastNet），并在前向传播后裁剪回 $90\times82$ 区域。
 
@@ -769,7 +828,7 @@ $$
 
 在全部四个验证基准算例中，`Implicit` 求解器均采用守恒型输运校正步（式(A.21)）、面积加权 PCG 内积和 $10^{-11}$ 的相对残差收敛容差。
 
-`Explicit` 框架在数值舍入误差范围内复现了 Fortran 参考解：在双涡旋海盆基准算例积分 24 小时后，其速度 RMSE 为 $1.78\times10^{-9}$ 和 $1.64\times10^{-9}\,\mathrm{m\,s^{-1}}$，海面高度 RMSE 为 $8.51\times10^{-10}\,\mathrm m$（表8和图8）。`Implicit` 框架在斜压时间步上以半隐式椭圆求解替代了外模态子步循环；其双涡旋海盆 24 小时水位差为 $1.42\,\mathrm{mm}$，当将 $\Delta t$ 从 $900\,\mathrm s$ 减小至 $100\,\mathrm s$ 时，该差值缩小至 $0.46\,\mathrm{mm}$，证实了两种自由面时间离散格式之间的时间相容性。在近岸潮汐基准算例中，第 240–360 小时的水位均方根差在 `Explicit` 中为 $1.9\,\mu\mathrm m$，在 `Implicit` 中为 $0.50\,\mathrm{mm}$，验潮站 $\mathrm M_2$ 潮汐振幅和相位与 Fortran 的偏差在 $0.46\,\mathrm{mm}$ 和 $0.042^\circ$ 以内。在静止层结海山基准算例中，两个 PyTorch 框架与 Fortran POM 在积分 10 天后均产生了约 $0.30\,\mathrm{m\,s^{-1}}$ 的相同地形跟随坐标斜压压强梯度误差流 [ShchepetkinMcWilliams2003Pressure]，模式间速度差异低于 $10^{-4}\,\mathrm{m\,s^{-1}}$。在真实地形胶州湾基准算例中，无缓坡冷启动的 $\mathrm M_2$ 潮波跨越复杂岸线几何与浅滩传播，`Explicit` 框架在初始步上与 Fortran 达到机器精度吻合（$\sim10^{-16}\,\mathrm m$），并在第 10–15 天维持 $0.094\,\mathrm{mm}$ 的水位均方根差（第 15 天终点为 $0.19\,\mathrm{mm}$）；`Implicit` 框架在 $\Delta t=10\,\mathrm s$ 下衰减前 6 小时冷启动外重力波瞬态后收敛至受迫潮汐平衡态，第 10–15 天水位均方根差为 $0.19\,\mathrm{mm}$（第 15 天终点为 $0.28\,\mathrm{mm}$），两个框架在湾内验潮站的 $\mathrm M_2$ 振幅和相位偏差均在 $0.12\,\mathrm{mm}$ 和 $0.010^\circ$ 以内（图9）。
+`Explicit` 框架在数值舍入误差范围内复现了 Fortran 参考解：在双涡旋海盆基准算例积分 24 小时后，其速度 RMSE 为 $1.78\times10^{-9}$ 和 $1.64\times10^{-9}\,\mathrm{m\,s^{-1}}$，海面高度 RMSE 为 $8.51\times10^{-10}\,\mathrm m$（表8和图8）。`Implicit` 框架在斜压时间步上以半隐式椭圆求解替代了外模态子步循环；其双涡旋海盆 24 小时水位差为 $1.42\,\mathrm{mm}$，当将 $\Delta t$ 从 $900\,\mathrm s$ 减小至 $100\,\mathrm s$ 时，该差值缩小至 $0.46\,\mathrm{mm}$，证实了两种自由面时间离散格式之间的时间相容性。在近岸潮汐基准算例中，第 240–360 小时的水位均方根差在 `Explicit` 中为 $1.9\,\mu\mathrm m$，在 `Implicit` 中为 $0.50\,\mathrm{mm}$，验潮站 $\mathrm M_2$ 潮汐振幅和相位与 Fortran 的偏差在 $0.46\,\mathrm{mm}$ 和 $0.042^\circ$ 以内。在静止层结海山基准算例中，两个 PyTorch 框架与 Fortran POM 在积分 10 天后均产生了约 $0.30\,\mathrm{m\,s^{-1}}$ 的相同地形跟随坐标斜压压强梯度误差流 [35]，模式间速度差异低于 $10^{-4}\,\mathrm{m\,s^{-1}}$。在真实地形胶州湾基准算例中，无缓坡冷启动的 $\mathrm M_2$ 潮波跨越复杂岸线几何与浅滩传播，`Explicit` 框架在初始步上与 Fortran 达到机器精度吻合（$\sim10^{-16}\,\mathrm m$），并在第 10–15 天维持 $0.094\,\mathrm{mm}$ 的水位均方根差（第 15 天终点为 $0.19\,\mathrm{mm}$）；`Implicit` 框架在 $\Delta t=10\,\mathrm s$ 下衰减前 6 小时冷启动外重力波瞬态后收敛至受迫潮汐平衡态，第 10–15 天水位均方根差为 $0.19\,\mathrm{mm}$（第 15 天终点为 $0.28\,\mathrm{mm}$），两个框架在湾内验潮站的 $\mathrm M_2$ 振幅和相位偏差均在 $0.12\,\mathrm{mm}$ 和 $0.010^\circ$ 以内（图9）。
 
 **表8 | 各验证基准算例结束时相对于双精度 Fortran POM 参考解的均方根差异。** 速度 $u,v$ 单位为 $\mathrm{m\,s^{-1}}$，位温 $T$ 单位为 $^\circ\mathrm C$，盐度 $S$ 为模式盐度单位，自由面高度 $\eta$ 单位为 $\mathrm m$。
 

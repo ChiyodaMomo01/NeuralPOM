@@ -5,7 +5,7 @@
 <p align="center">
   Ruiqi&nbsp;Shu<sup>1,2,†</sup> &nbsp;·&nbsp;
   Guangliang&nbsp;Liu<sup>1,3,4,†</sup> &nbsp;·&nbsp;
-  Ruijian&nbsp;Gou<sup>5,†,*</sup> &nbsp;·&nbsp;
+  Ruijian&nbsp;Gou<sup>5,†</sup> &nbsp;·&nbsp;
   Tianrun&nbsp;Gao<sup>6</sup> &nbsp;·&nbsp;
   Haomin&nbsp;Wen<sup>7</sup> &nbsp;·&nbsp;
   Hao&nbsp;Li<sup>8,7,2,*</sup> &nbsp;·&nbsp;
@@ -40,7 +40,7 @@
 7. Shanghai Innovation Institute, Shanghai, China
 8. Artificial Intelligence Innovation and Incubation Institute, Fudan University, Shanghai, China
 
-† 共同第一作者（同等贡献）。* 通讯作者：[Ruijian Gou](mailto:ruijian.gou@awi.de)、[Hao Li](mailto:lihao_lh@fudan.edu.cn)、[Xiaomeng Huang](mailto:hxm@tsinghua.edu.cn)。
+† 共同第一作者（同等贡献）。* 通讯作者：[Hao Li](mailto:lihao_lh@fudan.edu.cn)、[Xiaomeng Huang](mailto:hxm@tsinghua.edu.cn)。
 
 </details>
 

@@ -55,6 +55,8 @@ For a specific comparison, match the physical core, correction interval, initial
 
 ## Authors and availability
 
-The [repository README](https://github.com/ChiyodaMomo01/NeuralPOM) and manuscript contain the full author affiliations. Corresponding authors are **Ruijian Gou** ([ruijian.gou@awi.de](mailto:ruijian.gou@awi.de)), **Hao Li** ([lihao_lh@fudan.edu.cn](mailto:lihao_lh@fudan.edu.cn)), and **Xiaomeng Huang** ([hxm@tsinghua.edu.cn](mailto:hxm@tsinghua.edu.cn)).
+**Ruiqi Shu, Guangliang Liu, and Ruijian Gou contributed equally**, in this author order.
+
+The [repository README](https://github.com/ChiyodaMomo01/NeuralPOM) and manuscript contain the full author affiliations. Corresponding authors are **Hao Li** ([lihao_lh@fudan.edu.cn](mailto:lihao_lh@fudan.edu.cn)) and **Xiaomeng Huang** ([hxm@tsinghua.edu.cn](mailto:hxm@tsinghua.edu.cn)).
 
 Code is available on [GitHub](https://github.com/ChiyodaMomo01/NeuralPOM) under Apache-2.0. Data are hosted in the [NeuralPOM ModelScope repository](https://www.modelscope.cn/datasets/chiyodamomo01/NeuralPOM). See its dataset documentation for available assets and access.
