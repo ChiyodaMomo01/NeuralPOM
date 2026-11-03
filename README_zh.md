@@ -13,7 +13,9 @@
 </p>
 
 <p align="center">
-  <a href="paper/NeuralPOM.pdf"><strong>论文 (Paper)</strong></a>
+  <a href="https://arxiv.org/abs/2611.02460"><strong>arXiv</strong></a>
+  &nbsp;·&nbsp;
+  <a href="https://arxiv.org/pdf/2611.02460"><strong>论文 (PDF)</strong></a>
   &nbsp;·&nbsp;
   <a href="paper/Supplement.pdf"><strong>补充材料 (Supplement)</strong></a>
   &nbsp;·&nbsp;
@@ -235,11 +237,13 @@ paper/                   # 论文终稿 PDF、补充材料 PDF、图表与源数
 
 ```bibtex
 @misc{shu2026neuralpom,
-  title  = {New Wine in an Old Bottle: NeuralPOM: A Hybrid Ocean Forecast Model with Differentiable Dynamics and Staged Learning},
-  author = {Shu, Ruiqi and Liu, Guangliang and Gou, Ruijian and Gao, Tianrun and Wen, Haomin and Li, Hao and Huang, Xiaomeng},
-  year   = {2026},
-  note   = {Unpublished manuscript},
-  url    = {https://github.com/ChiyodaMomo01/NeuralPOM}
+  title         = {New Wine in an Old Bottle -- NeuralPOM: A Hybrid Ocean Forecast Model with Differentiable Dynamics and Staged Learning},
+  author        = {Shu, Ruiqi and Liu, Guangliang and Gou, Ruijian and Gao, Tianrun and Wen, Haomin and Li, Hao and Huang, Xiaomeng},
+  year          = {2026},
+  eprint        = {2611.02460},
+  archivePrefix = {arXiv},
+  primaryClass  = {physics.ao-ph},
+  url           = {https://arxiv.org/abs/2611.02460}
 }
 ```
 

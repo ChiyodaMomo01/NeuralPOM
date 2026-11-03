@@ -8,7 +8,7 @@ description: The NeuralPOM manuscript, its scientific argument, figures, source 
 
 Ruiqi Shu · Guangliang Liu · Ruijian Gou · Tianrun Gao · Haomin Wen · Hao Li · Xiaomeng Huang
 
-[Read the manuscript ↗](https://github.com/ChiyodaMomo01/NeuralPOM/blob/main/paper/NeuralPOM.pdf) · [Supplement ↗](https://github.com/ChiyodaMomo01/NeuralPOM/blob/main/paper/Supplement.pdf) · [Numerical source tables ↗](https://github.com/ChiyodaMomo01/NeuralPOM/tree/main/paper/data)
+[arXiv:2611.02460 ↗](https://arxiv.org/abs/2611.02460) · [Read the PDF ↗](https://arxiv.org/pdf/2611.02460) · [Supplement ↗](https://github.com/ChiyodaMomo01/NeuralPOM/blob/main/paper/Supplement.pdf) · [Numerical source tables ↗](https://github.com/ChiyodaMomo01/NeuralPOM/tree/main/paper/data)
 
 ## The scientific question
 

@@ -6,7 +6,7 @@ Choose one physical core and correction interval, then keep its references, trai
 
 The repository includes the manuscript, supplement and publication source tables under `paper/`:
 
-- [Manuscript](https://github.com/ChiyodaMomo01/NeuralPOM/blob/main/paper/NeuralPOM.pdf).
+- [arXiv preprint (arXiv:2611.02460)](https://arxiv.org/abs/2611.02460) and [PDF](https://arxiv.org/pdf/2611.02460) ([repository copy](https://github.com/ChiyodaMomo01/NeuralPOM/blob/main/paper/NeuralPOM.pdf)).
 - [Supplement](https://github.com/ChiyodaMomo01/NeuralPOM/blob/main/paper/Supplement.pdf).
 - [Source data](https://github.com/ChiyodaMomo01/NeuralPOM/tree/main/paper/data).
 

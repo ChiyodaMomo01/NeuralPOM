@@ -4,7 +4,7 @@ This guide links scientific explanations to the **NeuralPOM manuscript** and imp
 
 ## NeuralPOM
 
-Shu, R., Liu, G., Gou, R., Gao, T., Wen, H., Li, H., and Huang, X. *New Wine in an Old Bottle — NeuralPOM: A Hybrid Ocean Forecast Model with Differentiable Dynamics and Staged Learning.* [Repository manuscript](https://github.com/ChiyodaMomo01/NeuralPOM/blob/main/paper/NeuralPOM.pdf), [supplement](https://github.com/ChiyodaMomo01/NeuralPOM/blob/main/paper/Supplement.pdf), and [source data](https://github.com/ChiyodaMomo01/NeuralPOM/tree/main/paper/data).
+Shu, R., Liu, G., Gou, R., Gao, T., Wen, H., Li, H., and Huang, X. (2026). *New Wine in an Old Bottle — NeuralPOM: A Hybrid Ocean Forecast Model with Differentiable Dynamics and Staged Learning.* arXiv:2611.02460 [physics.ao-ph]. [arXiv](https://arxiv.org/abs/2611.02460), [PDF](https://arxiv.org/pdf/2611.02460), [supplement](https://github.com/ChiyodaMomo01/NeuralPOM/blob/main/paper/Supplement.pdf), and [source data](https://github.com/ChiyodaMomo01/NeuralPOM/tree/main/paper/data).
 
 ## Ocean dynamics and mixing
 

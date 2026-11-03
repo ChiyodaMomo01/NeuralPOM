@@ -89,14 +89,12 @@ const sections = [
     <footer class="guide-resources">
       <p>Research resources</p>
       <nav aria-label="Research resources">
+        <a href="https://arxiv.org/abs/2611.02460">arXiv</a>
         <a href="https://github.com/ChiyodaMomo01/NeuralPOM">GitHub</a>
         <a href="https://www.modelscope.cn/datasets/chiyodamomo01/NeuralPOM"
           >Dataset</a
         >
-        <a
-          href="https://github.com/ChiyodaMomo01/NeuralPOM/blob/main/paper/NeuralPOM.pdf"
-          >Manuscript PDF</a
-        >
+        <a href="https://arxiv.org/pdf/2611.02460">Paper PDF</a>
         <a
           href="https://github.com/ChiyodaMomo01/NeuralPOM/tree/main/paper/data"
           >Source tables</a

@@ -1,6 +1,7 @@
 # NeuralPOM manuscript
 
-- [English paper](NeuralPOM.pdf)
+- [arXiv preprint (2611.02460)](https://arxiv.org/abs/2611.02460) · [arXiv PDF](https://arxiv.org/pdf/2611.02460)
+- [English paper (repository copy)](NeuralPOM.pdf)
 - [Supplementary figures](Supplement.pdf)
 - [Chinese version](paper_zh.md)
 - [Reference dataset on ModelScope](https://www.modelscope.cn/datasets/chiyodamomo01/NeuralPOM)
